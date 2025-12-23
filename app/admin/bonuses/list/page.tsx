@@ -154,7 +154,7 @@ const BonusesCodesPage = () => {
               </h3>
             </div>
             <div className="absolute right-8 top-10 flex gap-4">
-              <Link href="/admin/bonuses/add">
+              <Link href="/admin/bonuses">
                 <button className="px-8 py-3 rounded-xl bg-[#2D7FFF] text-white text-sm flex items-center justify-center gap-2 hover:bg-[#2D7FFFEE] transition-all cursor-pointer shadow-[0_0_20px_rgba(45,127,255,0.5)]">
                   Add Bonus
                 </button>
