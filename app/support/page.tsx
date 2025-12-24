@@ -33,7 +33,7 @@ export default function SupportPage() {
             </div>
             <h3 className="text-white text-xl  mb-2">Live Chat</h3>
             <p className="text-[#E9D4FFB2] text-sm mb-8">Available 24/7</p>
-            <button className="w-full py-3 rounded-lg bg-[#9810FA4D] border border-[#C27AFF80] text-[#DAB2FF] hover:bg-[#9810FA]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 rounded-lg bg-[#9810FA4D] border border-[#C27AFF80] text-[#DAB2FF] hover:bg-[#9810FA]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Start Chat
             </button>
           </div>
@@ -123,7 +123,7 @@ export default function SupportPage() {
 
             <button
               type="submit"
-              className="w-full bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)] hover:from-[#9810FA]/90 hover:to-[#FF007F]/90 text-white  py-4 rounded-lg transition-all shadow-[0_0_20px_rgba(160,32,240,0.4)] text-sm uppercase tracking-wide flex items-center justify-center gap-2"
+              className="w-full bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)] hover:from-[#9810FA]/90 hover:to-[#FF007F]/90 text-white  py-4 rounded-lg transition-all shadow-[0_0_20px_rgba(160,32,240,0.4)] text-sm uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
             >
               <BsSend /> Send Message
             </button>

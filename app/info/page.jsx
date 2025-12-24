@@ -401,7 +401,7 @@ export default function Info() {
                   Our support team is available 24/7 to assist you with any
                   questions.
                 </p>
-                <button className="bg-[linear-gradient(90deg,#FF8904_0%,#C27AFF_50%,#FB64B6_100%),linear-gradient(0deg,rgba(0,0,0,0),rgba(0,0,0,0))] rounded-xl px-3 py-2 text-white ">
+                <button className="bg-[linear-gradient(90deg,#FF8904_0%,#C27AFF_50%,#FB64B6_100%),linear-gradient(0deg,rgba(0,0,0,0),rgba(0,0,0,0))] rounded-xl px-3 py-2 text-white cursor-pointer ">
                   Contact Support
                 </button>
               </div>

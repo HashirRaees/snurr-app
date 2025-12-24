@@ -60,7 +60,7 @@ export default function SignupPage() {
             </div>
             <input
               type="date"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm [color-scheme:dark]"
+              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm scheme-dark"
             />
           </div>
           <p className="text-[10px] text-gray-600 pl-1">
@@ -106,7 +106,7 @@ export default function SignupPage() {
         <div className="flex items-start text-xs pt-2">
           <input
             type="checkbox"
-            className="mt-0.5 mr-2 rounded bg-[#0a0a10] border-white/10 focus:ring-primary text-primary"
+            className="mt-0.5 mr-2 rounded bg-[#0a0a10] border-white/10 focus:ring-primary text-primary cursor-pointer"
           />
           <span className="text-gray-400">
             I agree to the{" "}
@@ -127,7 +127,7 @@ export default function SignupPage() {
         </div>
 
         {/* Submit Button */}
-        <button className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold py-3 rounded-lg transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm uppercase tracking-wide mt-2">
+        <button className="w-full bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)]  hover:from-primary/90 hover:to-secondary/90 text-white py-3 rounded-lg transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm mt-2 cursor-pointer">
           Create Account
         </button>
 
@@ -147,7 +147,7 @@ export default function SignupPage() {
               <div className="w-full border-t border-white/5"></div>
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-[#12121a] text-gray-600 uppercase tracking-widest font-bold text-[10px]">
+              <span className="px-2 bg-[#12121a] text-gray-600  tracking-widest font-bold text-[10px]">
                 Or sign up with
               </span>
             </div>
@@ -158,13 +158,13 @@ export default function SignupPage() {
         <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
-            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium"
+            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium cursor-pointer"
           >
             <FaGoogle className="text-white" /> Google
           </button>
           <button
             type="button"
-            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium"
+            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium cursor-pointer"
           >
             <FaFacebook className="text-white" /> Facebook
           </button>

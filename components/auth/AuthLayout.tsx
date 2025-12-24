@@ -33,7 +33,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         </p>
 
         {/* Card */}
-        <div className="w-full bg-[#12121A] backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+        <div className="w-full bg-[#12121A] backdrop-blur-xl shadow-[0_3px_62.8px_-12px_#59168BDB] shadow-[0_0_0px_1px_#AD46FF33] border border-[#C27AFF4D] p-8 rounded-2xl shadow-2xl relative overflow-hidden">
           <h2 className="text-white text-center text-xl font-medium mb-2">
             {title}
           </h2>

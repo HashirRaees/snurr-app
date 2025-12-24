@@ -47,7 +47,7 @@ export default function PromotionPage() {
                 Min deposit $20 • Wagering 35x
               </p>
             </div>
-            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#9810FA4D] border border-[#C27AFF80] text-[#DAB2FF] hover:bg-[#9810FA]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#9810FA4D] border border-[#C27AFF80] text-[#DAB2FF] hover:bg-[#9810FA]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Claim Now <IoIosArrowForward />
             </button>
           </div>
@@ -71,7 +71,7 @@ export default function PromotionPage() {
                 No wagering • Auto credited
               </p>
             </div>
-            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F549004D] border border-[#FF890480] text-[#FFB86A] hover:bg-[#FFA500]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F549004D] border border-[#FF890480] text-[#FFB86A] hover:bg-[#FFA500]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Claim Now <IoIosArrowForward />
             </button>
           </div>
@@ -95,7 +95,7 @@ export default function PromotionPage() {
                 Min deposit $30 • Wagering 40x
               </p>
             </div>
-            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F6339A4D] border border-[#FB64B680] text-[#FDA5D5] hover:bg-[#FF0055]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F6339A4D] border border-[#FB64B680] text-[#FDA5D5] hover:bg-[#FF0055]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Claim Now <IoIosArrowForward />
             </button>
           </div>
@@ -117,7 +117,7 @@ export default function PromotionPage() {
             <div className="border-t border-[#FFFFFF1A] py-3">
               <p className="text-[#DAB2FF80] text-xs">By invitation only</p>
             </div>
-            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#9810FA4D] border border-[#C27AFF80] text-[#DAB2FF] hover:bg-[#9810FA]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#9810FA4D] border border-[#C27AFF80] text-[#DAB2FF] hover:bg-[#9810FA]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Claim Now <IoIosArrowForward />
             </button>
           </div>
@@ -141,7 +141,7 @@ export default function PromotionPage() {
                 Min deposit $25 • Wagering 30x
               </p>
             </div>
-            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F549004D] border border-[#FF890480] text-[#FFB86A] hover:bg-[#FFA500]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F549004D] border border-[#FF890480] text-[#FFB86A] hover:bg-[#FFA500]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Claim Now <IoIosArrowForward />
             </button>
           </div>
@@ -165,7 +165,7 @@ export default function PromotionPage() {
                 Min deposit $30 • Wagering 40x
               </p>
             </div>
-            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F6339A4D] border border-[#FB64B680] text-[#FDA5D5] hover:bg-[#FF0055]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)]">
+            <button className="w-full py-3 flex items-center justify-center gap-2 rounded-lg bg-[#F6339A4D] border border-[#FB64B680] text-[#FDA5D5] hover:bg-[#FF0055]/50 hover:text-white transition-all shadow-[0_0_15px_rgba(152,16,250,0.2)] cursor-pointer">
               Claim Now <IoIosArrowForward />
             </button>
           </div>

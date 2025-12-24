@@ -27,7 +27,7 @@ export default function NotFound() {
           404
         </h1>
 
-        {/* Icon */} 
+        {/* Icon */}
         <div className="w-20 h-20 border border-[#AD46FF33] shadow-[0_25px_50px_-12px_#59168B80] bg-[linear-gradient(135deg,rgba(89,22,139,0.5)_0%,rgba(60,3,102,0.5)_100%)] rounded-full flex items-center justify-center mb-8 mx-auto">
           <IoSearchOutline className="text-4xl text-[#C27AFF]" />
         </div>
@@ -43,7 +43,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Link
             href="/"
-            className="px-8 py-3 rounded-3xl bg-[linear-gradient(90deg,_#9810FA_0%,_#8200DB_100%)] text-white font-medium flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(152,16,250,0.4)] hover:shadow-[0_0_30px_rgba(152,16,250,0.6)] transition-all"
+            className="px-8 py-3 rounded-3xl bg-[linear-gradient(90deg,#9810FA_0%,#8200DB_100%)] text-white font-medium flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(152,16,250,0.4)] hover:shadow-[0_0_30px_rgba(152,16,250,0.6)] transition-all cursor-pointer"
           >
             <GoHome className="text-lg" />
             Go Home
@@ -51,7 +51,7 @@ export default function NotFound() {
 
           <button
             onClick={() => router.back()}
-            className="px-8 py-3 rounded-3xl bg-[#3C036680] border border-[#AD46FF4D] text-[#DAB2FF] font-medium flex items-center justify-center gap-2 hover:bg-[#AD46FF33] hover:text-white transition-all"
+            className="px-8 py-3 rounded-3xl bg-[#3C036680] border border-[#AD46FF4D] text-[#DAB2FF] font-medium flex items-center justify-center gap-2 hover:bg-[#AD46FF33] hover:text-white transition-all cursor-pointer"
           >
             <FaArrowLeft className="text-sm" />
             Go Back

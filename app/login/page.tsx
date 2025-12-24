@@ -49,7 +49,7 @@ export default function LoginPage() {
           <label className="flex items-center text-gray-400 cursor-pointer hover:text-white transition-colors">
             <input
               type="checkbox"
-              className="mr-2 rounded bg-[#0a0a10] border-white/10 focus:ring-primary text-primary"
+              className="mr-2 rounded bg-[#0a0a10] border-white/10 focus:ring-primary text-primary cursor-pointer"
             />
             Remember me
           </label>
@@ -62,7 +62,7 @@ export default function LoginPage() {
         </div>
 
         {/* Submit Button */}
-        <button className="w-full py-3 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold py-3rounded-lg transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm uppercase tracking-wide rounded-md">
+        <button className="w-full py-3 bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)] text-white transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm rounded-md cursor-pointer">
           Sign In
         </button>
 
@@ -82,7 +82,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-white/5"></div>
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-[#12121a] text-gray-600 uppercase tracking-widest font-bold">
+              <span className="px-2 bg-[#12121a] text-gray-600 tracking-widest font-bold">
                 Or continue with
               </span>
             </div>
@@ -93,13 +93,13 @@ export default function LoginPage() {
         <div className="grid grid-cols-2 gap-4">
           <button
             type="button"
-            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium"
+            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium cursor-pointer"
           >
             <FaGoogle className="text-white" /> Google
           </button>
           <button
             type="button"
-            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium"
+            className="flex items-center justify-center gap-2 bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 py-2.5 rounded-lg transition-all text-xs font-medium cursor-pointer"
           >
             <FaFacebook className="text-white" /> Facebook
           </button>

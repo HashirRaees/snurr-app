@@ -3,9 +3,9 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
-  --primary: #A020F0;
-  --secondary: #FF007F;
-  --accent: #FFD700;
+  --primary: #a020f0;
+  --secondary: #ff007f;
+  --accent: #ffd700;
   --card-bg: #121225;
 }
 
@@ -16,7 +16,7 @@
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-card-bg: var(--card-bg);
-  --font-sans: var(--font-space);
+  --font-sans: Arial;
   --font-heading: var(--font-evil);
 }
 
@@ -26,6 +26,6 @@ body {
   font-family: var(--font-sans), sans-serif;
   overflow-x: hidden !important;
 }
-p{
+p {
   font-family: var(--font-sans), sans-serif;
 }

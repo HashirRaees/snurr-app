@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
-import { Space_Grotesk } from "next/font/google"; // Aeonik alternative
 import localFont from "next/font/local";
 import "./globals.css";
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space",
-  subsets: ["latin"],
-});
 
 const evilEmpire = localFont({
   src: "../public/fonts/Evil Empire.woff",
@@ -26,12 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${spaceGrotesk.variable} 
-         antialiased ${evilEmpire.variable}`}
-      >
-        {children}
-      </body>
+      <body className={`antialiased ${evilEmpire.variable}`}>{children}</body>
     </html>
   );
 }

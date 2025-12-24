@@ -49,7 +49,7 @@ const Navbar = () => {
               </Link>
               <Link
                 href="/signup"
-                className="bg-[linear-gradient(90deg,#9810FA_0%,#C800DE_100%)] hidden sm:block hover:bg-primary/90 text-white px-7 py-2 rounded-full transition-all shadow-[0_0_15px_rgba(160,32,240,0.5)] text-lg font-bold uppercase tracking-wide"
+                className="bg-[linear-gradient(90deg,#9810FA_0%,#C800DE_100%)] hidden sm:block hover:bg-primary/90 text-white px-7 py-2 rounded-full transition-all shadow-[0_0_15px_rgba(160,32,240,0.5)] text-lg font-bold uppercase tracking-wide cursor-pointer"
               >
                 Get Started
               </Link>
@@ -58,7 +58,7 @@ const Navbar = () => {
               <button
                 onClick={toggleMenu}
                 aria-label="Toggle menu"
-                className="block md:hidden text-white"
+                className="block md:hidden text-white cursor-pointer"
               >
                 <IoMenu className="text-3xl" />
               </button>
@@ -77,7 +77,7 @@ const Navbar = () => {
           <span className="font-heading text-2xl text-white">MENU</span>
           <button
             onClick={toggleMenu}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 hover:text-white cursor-pointer"
           >
             <IoClose size={28} />
           </button>

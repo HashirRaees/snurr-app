@@ -90,9 +90,7 @@ const RewardsSection = () => {
             <div className="z-10 text-white flex flex-col items-start">
               {/* Top Left: Limited Time Offer Badge */}
               <div className="flex items-center w-full justify-between mb-10">
-                <div
-                  className="bg-[linear-gradient(90deg,#F0B100_0%,#FF6900_50%,#FB2C36_100%)] text-white text-xs font-bold uppercase px-4 py-2 rounded-full shadow-lg tracking-wider"
-                >
+                <div className="bg-[linear-gradient(90deg,#F0B100_0%,#FF6900_50%,#FB2C36_100%)] text-white text-xs font-bold uppercase px-4 py-2 rounded-full shadow-lg tracking-wider">
                   <span className="mr-1">🔥</span> LIMITED TIME OFFER
                 </div>
 
@@ -146,7 +144,7 @@ const RewardsSection = () => {
                 {/* Primary Button: Claim Bonus Now */}
                 <button
                   className="flex-1 text-[#000000] font-bold py-8 px-8 rounded-full text-lg uppercase transition duration-300 transform hover:scale-[1.03] 
-                       bg-[linear-gradient(90deg,#C27AFF_0%,#E500FF_50%,#C27AFF_100%)] shadow-2xl"
+                       bg-[linear-gradient(90deg,#C27AFF_0%,#E500FF_50%,#C27AFF_100%)] shadow-2xl cursor-pointer"
                 >
                   <span className="flex items-center justify-center">
                     CLAIM BONUS NOW
@@ -157,7 +155,7 @@ const RewardsSection = () => {
                 {/* Secondary Button: View Terms */}
                 <button
                   className="flex-1 text-[#000000] font-bold py-8 px-8 rounded-full text-lg uppercase transition duration-300 transform hover:scale-[1.03]
-                       bg-[linear-gradient(90deg,#C27AFF_0%,#E500FF_50%,#C27AFF_100%)] shadow-xl"
+                       bg-[linear-gradient(90deg,#C27AFF_0%,#E500FF_50%,#C27AFF_100%)] shadow-xl cursor-pointer"
                 >
                   VIEW TERMS
                 </button>
@@ -190,7 +188,7 @@ const RewardsSection = () => {
               {/* Learn More Link */}
               <a
                 href="#"
-                className="flex items-center text-[#C27AFF] text-sm hover:opacity-100 transition duration-150"
+                className="flex items-center text-[#C27AFF] text-sm hover:opacity-100 transition duration-150 cursor-pointer"
               >
                 Learn more
                 <svg
@@ -231,7 +229,7 @@ const RewardsSection = () => {
               {/* Learn More Link */}
               <a
                 href="#"
-                className="flex items-center text-[#C27AFF] text-sm hover:opacity-100 transition duration-150"
+                className="flex items-center text-[#C27AFF] text-sm hover:opacity-100 transition duration-150 cursor-pointer"
               >
                 Learn more
                 <svg
@@ -272,7 +270,7 @@ const RewardsSection = () => {
               {/* Learn More Link */}
               <a
                 href="#"
-                className="flex items-center text-[#C27AFF] text-sm hover:opacity-100 transition duration-150"
+                className="flex items-center text-[#C27AFF] text-sm hover:opacity-100 transition duration-150 cursor-pointer"
               >
                 Learn more
                 <svg

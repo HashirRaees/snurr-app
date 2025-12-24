@@ -48,7 +48,7 @@ const Footer = () => {
                   <Link
                     key={i}
                     href="#"
-                    className="w-10 h-10 rounded-full bg-[#1A0B2E] border border-[#AD46FF33] flex items-center justify-center text-[#DAB2FF] hover:bg-[#AD46FF] hover:text-white hover:border-[#AD46FF] hover:shadow-[0_0_15px_rgba(173,70,255,0.5)] transition-all duration-300"
+                    className="w-10 h-10 rounded-full bg-[#1A0B2E] border border-[#AD46FF33] flex items-center justify-center text-[#DAB2FF] hover:bg-[#AD46FF] hover:text-white hover:border-[#AD46FF] hover:shadow-[0_0_15px_rgba(173,70,255,0.5)] transition-all duration-300 cursor-pointer"
                   >
                     <Icon size={16} />
                   </Link>
@@ -73,7 +73,7 @@ const Footer = () => {
                 <li key={item}>
                   <Link
                     href="#"
-                    className="hover:text-white hover:translate-x-1 transition-all inline-block"
+                    className="hover:text-white hover:translate-x-1 transition-all inline-block cursor-pointer"
                   >
                     {item}
                   </Link>
@@ -98,7 +98,7 @@ const Footer = () => {
                 <li key={item}>
                   <Link
                     href="#"
-                    className="hover:text-white hover:translate-x-1 transition-all inline-block"
+                    className="hover:text-white hover:translate-x-1 transition-all inline-block cursor-pointer"
                   >
                     {item}
                   </Link>
@@ -123,7 +123,7 @@ const Footer = () => {
                 <li key={item}>
                   <Link
                     href="#"
-                    className="hover:text-white hover:translate-x-1 transition-all inline-block"
+                    className="hover:text-white hover:translate-x-1 transition-all inline-block cursor-pointer"
                   >
                     {item}
                   </Link>
@@ -142,7 +142,7 @@ const Footer = () => {
             {PAYMENTS.map((method) => (
               <div
                 key={method}
-                className="px-6 py-2 rounded-xl bg-[#1A0B2E] border border-[#AD46FF33] text-[#DAB2FF] text-xs font-bold uppercase tracking-wider hover:bg-[#AD46FF33] hover:border-[#AD46FF66] hover:text-white transition-all cursor-default"
+                className="px-6 py-2 rounded-xl bg-[#1A0B2E] border border-[#AD46FF33] text-[#DAB2FF] text-xs font-bold uppercase tracking-wider hover:bg-[#AD46FF33] hover:border-[#AD46FF66] hover:text-white transition-all cursor-pointer"
               >
                 {method}
               </div>

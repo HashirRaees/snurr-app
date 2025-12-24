@@ -4,7 +4,6 @@ import { HiOutlineSparkles } from "react-icons/hi";
 import { CiFilter } from "react-icons/ci";
 import { FaPlay } from "react-icons/fa";
 
-
 // Placeholder data for games based on the design image
 const GAMES = [
   {
@@ -87,7 +86,7 @@ const GamesSection = () => {
             {CATEGORIES.map((cat, idx) => (
               <button
                 key={idx}
-                className={`px-8 py-1 rounded-full text-sm font-bold uppercase tracking-wide transition-all
+                className={`px-8 py-1 rounded-full text-sm font-bold uppercase tracking-wide transition-all cursor-pointer
                     ${
                       idx === 0
                         ? "bg-[linear-gradient(90deg,#9810FA_0%,#C800DE_100%)] text-white"
@@ -98,7 +97,7 @@ const GamesSection = () => {
               </button>
             ))}
           </div>
-          <div className="bg-[#AD46FF1A] rounded-full border gap-2 border-[#AD46FF66] py-3 px-6 flex items-center justify-center shadow-lg">
+          <div className="bg-[#AD46FF1A] rounded-full border gap-2 border-[#AD46FF66] py-3 px-6 flex items-center justify-center shadow-lg cursor-pointer">
             <CiFilter className="text-white text-lg font-bold" />
             <span className="text-white text-sm font-bold uppercase">
               Filters
@@ -144,7 +143,7 @@ const GamesSection = () => {
 
                 <button
                   className="w-full text-white font-bold py-3 px-6 rounded-3xl text-lg uppercase transition duration-300 transform hover:scale-[1.02]
-                       bg-purple-800 hover:bg-purple-700 border border-purple-600/50 shadow-lg"
+                       bg-purple-800 hover:bg-purple-700 border border-purple-600/50 shadow-lg cursor-pointer"
                 >
                   Try Demo
                 </button>
@@ -169,15 +168,13 @@ const GamesSection = () => {
                 />
               </div>
               <div className="px-3 gap-2 md:gap-3 py-4 flex items-center justify-between">
-            <button
-            className="bg-[linear-gradient(270deg,#C27AFF_0%,#C800DE_50%,#C27AFF_100%)] text-xs md:text-sm text-white px-4 md:px-16 py-2 rounded-full font-bold uppercase tracking-wide transition-all"
-          >
-            Play
-          </button>
+                <button className="bg-[linear-gradient(270deg,#C27AFF_0%,#C800DE_50%,#C27AFF_100%)] text-xs md:text-sm text-white px-4 md:px-16 py-2 rounded-full font-bold uppercase tracking-wide transition-all cursor-pointer">
+                  Play
+                </button>
 
-           <button
+                <button
                   className="w-full text-white font-bold py-2 px-2 text-xs md:text-sm rounded-3xl uppercase transition duration-300 transform hover:scale-[1.02]
-                       bg-purple-800 hover:bg-purple-700 border border-purple-600/50 shadow-lg"
+                       bg-purple-800 hover:bg-purple-700 border border-purple-600/50 shadow-lg cursor-pointer"
                 >
                   Demo
                 </button>
@@ -189,7 +186,7 @@ const GamesSection = () => {
         <div className="text-center mt-12">
           <Link
             href="#"
-            className="inline-block bg-[linear-gradient(270deg,#C27AFF_0%,#C800DE_50%,#C27AFF_100%)] text-white px-10 py-4 rounded-full font-bold uppercase tracking-wide transition-all"
+            className="inline-block bg-[linear-gradient(270deg,#C27AFF_0%,#C800DE_50%,#C27AFF_100%)] text-white px-10 py-4 rounded-full font-bold uppercase tracking-wide transition-all cursor-pointer"
           >
             View All Games
           </Link>

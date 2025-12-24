@@ -23,7 +23,7 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <Link
             href="/signup"
-            className="bg-[linear-gradient(270deg,#C27AFF_0%,#C800DE_50%,#C27AFF_100%)] text-white text-lg px-10 py-4 rounded-full font-heading tracking-wider shadow-[0_0_20px_rgba(255,0,127,0.5)] transition-all transform hover:scale-105"
+            className="bg-[linear-gradient(270deg,#C27AFF_0%,#C800DE_50%,#C27AFF_100%)] text-white text-lg px-10 py-4 rounded-full font-heading tracking-wider shadow-[0_0_20px_rgba(255,0,127,0.5)] transition-all transform hover:scale-105 cursor-pointer"
           >
             Start Playing
           </Link>

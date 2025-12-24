@@ -94,17 +94,16 @@ const UserMissionPage = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="flex justify-center px-3 py-2 items-center">
+                <tbody>
                 {/* Single Row for Empty State Content */}
                 <tr>
-                  <td colSpan={20} className="py-24 w-full">
-                    <div className="flex flex-col items-center justify-center text-center opacity-40">
-                      <p className="text-[#99A1AF] text-sm font-medium">
-                        No data available in table
-                      </p>
-                    </div>
-                  </td>
-                </tr>
+                    <td
+                      colSpan={10}
+                      className="px-6 py-12 text-center text-[#99A1AF] text-sm"
+                    >
+                      No data available in table
+                    </td>
+                  </tr>
               </tbody>
             </table>
 

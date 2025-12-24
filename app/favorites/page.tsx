@@ -11,7 +11,7 @@ export default function FavoritesPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/"
-          className="w-10 h-10 rounded-lg bg-[#59168B80] border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+          className="w-10 h-10 rounded-lg bg-[#59168B80] border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-pointer"
         >
           <FaArrowLeft />
         </Link>
