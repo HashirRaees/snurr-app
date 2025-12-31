@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../../components/admin/Navbar";
+import axiosInstance from "@/lib/axios";
 import { IoMdSearch, IoMdEye, IoMdTrash } from "react-icons/io";
 import {
   FiFilter,
@@ -16,6 +17,31 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const AffiliateRequests = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          "/api/affiliates/affiliate-users/requests/"
+        );
+        let rawData = response.data;
+        if (rawData && typeof rawData === "object" && !Array.isArray(rawData)) {
+          rawData = rawData.results || rawData.data || rawData.requests || [];
+        }
+        setData(Array.isArray(rawData) ? rawData : []);
+      } catch (err: any) {
+        console.error("Failed to fetch affiliate requests:", err);
+        setError("Failed to load requests from the server.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRequests();
+  }, []);
 
   const StatusCard = ({
     icon: Icon,
@@ -47,12 +73,13 @@ const AffiliateRequests = () => {
     status,
     type,
   }: {
-    status: string;
+    status: any;
     type: "approval" | "user";
   }) => {
+    const s = String(status || "").toLowerCase();
     const getStyles = () => {
       if (type === "approval") {
-        switch (status.toLowerCase()) {
+        switch (s) {
           case "approved":
             return "bg-[#12B76A1A] text-[#12B76A] border-[#12B76A33]";
           case "pending":
@@ -63,10 +90,14 @@ const AffiliateRequests = () => {
             return "bg-white/10 text-white border-white/20";
         }
       } else {
-        switch (status.toLowerCase()) {
+        switch (s) {
           case "active":
+          case "true":
+          case "1":
             return "bg-[#12B76A1A] text-[#12B76A] border-[#12B76A33]";
           case "inactive":
+          case "false":
+          case "0":
             return "bg-[#F790091A] text-[#F79009] border-[#F7900933]";
           default:
             return "bg-white/10 text-white border-white/20";
@@ -74,107 +105,49 @@ const AffiliateRequests = () => {
       }
     };
 
+    const statusText =
+      s === "true" || s === "1"
+        ? "Active"
+        : s === "false" || s === "0"
+        ? "Inactive"
+        : status;
+
     return (
       <span
         className={`px-3 py-1 rounded-full text-[12px] font-medium border ${getStyles()}`}
       >
-        {status}
+        {statusText || "N/A"}
       </span>
     );
   };
 
-  const requests = [
-    {
-      username: "beth.e.rade",
-      name: "Raheel Hazel Nahi",
-      email: "raheel.ch11@gmail.com",
-      country: "Bangladesh",
-      date: "2021-03-12",
-      approval: "Approved",
-      status: "Active",
-    },
-    {
-      username: "faxo",
-      name: "faxo faxoguty",
-      email: "faxo@a-idea.net",
-      country: "Russia",
-      date: "2021-04-15",
-      approval: "Approved",
-      status: "Inactive",
-    },
-    {
-      username: "Sundarban",
-      name: "Gregory Eric Gregory Eric",
-      email: "marches.sundarban@info.com",
-      country: "Romania",
-      date: "2022-06-29",
-      approval: "Approved",
-      status: "Active",
-    },
-    {
-      username: "MCLAN_GLOBAL",
-      name: "MCLAN_GLOBAL",
-      email: "mclan.auto.support1@yandex.ru -vavada.com",
-      country: "France",
-      date: "2022-02-12",
-      approval: "Approved",
-      status: "Active",
-    },
-    {
-      username: "wbsPPK",
-      name: "wbsPPK_wbsPPK",
-      email: "leeminglady@lw.com",
-      country: "Afghanistan",
-      date: "2024-04-07",
-      approval: "Pending",
-      status: "Inactive",
-    },
-    {
-      username: "infoazenego",
-      name: "Richard Cohen",
-      email: "infoazenego@s.com",
-      country: "Canada",
-      date: "2021-10-14",
-      approval: "Pending",
-      status: "Inactive",
-    },
-    {
-      username: "fonatisaimo",
-      name: "data_data.data",
-      email: "char.gbl@gigabada.com",
-      country: "Estonia",
-      date: "2021-06-07",
-      approval: "Pending",
-      status: "Inactive",
-    },
-    {
-      username: "SAS-AxsP",
-      name: "SAS-AxsP SAS-AxsP",
-      email: "bigeyeads@ch137.rg",
-      country: "Afghanistan",
-      date: "2021-12-08",
-      approval: "Pending",
-      status: "Inactive",
-    },
-    {
-      username: "SAS-AxsP",
-      name: "SAS-AxsP SAS-AxsP",
-      email: "samspiano@sh8418913",
-      country: "Afghanistan",
-      date: "2021-12-08",
-      approval: "Pending",
-      status: "Inactive",
-    },
-    {
-      username: "SAS-AxsP",
-      name: "SAS-AxsP SAS-AxsP",
-      email: "samspiano@sh9918912",
-      country: "Albania",
-      date: "2021-12-08",
-      approval: "Pending",
-      status: "Inactive",
-    },
-  ];
+  // Filter logic with robustness
+  const filteredRequests = (data || []).filter((row: any) => {
+    if (!row) return false;
+    const searchStr = searchTerm.toLowerCase();
+    const username = String(row.username || row.user_name || "").toLowerCase();
+    const name = String(row.name || row.full_name || "").toLowerCase();
+    const email = String(row.email || "").toLowerCase();
+    return (
+      username.includes(searchStr) ||
+      name.includes(searchStr) ||
+      email.includes(searchStr)
+    );
+  });
+
+  // Calculate stats from real data with robustness
+  const approvedCount = (data || []).filter((r) => {
+    const s = String(r?.approval || r?.approval_status || "").toLowerCase();
+    return s === "approved";
+  }).length;
+  const pendingCount = (data || []).filter((r) => {
+    const s = String(r?.approval || r?.approval_status || "").toLowerCase();
+    return s === "pending";
+  }).length;
+  const rejectedCount = (data || []).filter((r) => {
+    const s = String(r?.approval || r?.approval_status || "").toLowerCase();
+    return s === "rejected";
+  }).length;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -220,32 +193,38 @@ const AffiliateRequests = () => {
           <StatusCard
             icon={FiCheckCircle}
             label="Approved"
-            value="4"
+            value={loading ? "..." : approvedCount}
             iconBg="bg-[#00C95033]"
             iconColor="text-[#05DF72]"
           />
           <StatusCard
             icon={FiClock}
             label="Pending"
-            value="6"
+            value={loading ? "..." : pendingCount}
             iconBg="bg-[#FF690033]"
             iconColor="text-[#FF8904]"
           />
           <StatusCard
             icon={FiXCircle}
             label="Rejected"
-            value="0"
+            value={loading ? "..." : rejectedCount}
             iconBg="bg-[#FB2C3633]"
             iconColor="text-[#FF6467]"
           />
           <StatusCard
             icon={FiUsers}
             label="Total Requests"
-            value="10"
+            value={loading ? "..." : data.length}
             iconBg="bg-[#AD46FF33]"
             iconColor="text-[#C27AFF]"
           />
         </div>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-500 text-sm">
+            {error}
+          </div>
+        )}
 
         {/* Table Container */}
         <div className="bg-[#10182899] border border-[#1E293980] rounded-[32px] overflow-hidden backdrop-blur-md">
@@ -292,44 +271,73 @@ const AffiliateRequests = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#C27AFF11]">
-                {requests.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-white/5 transition-colors group"
-                  >
-                    <td className="px-8 py-5 text-white font-medium text-sm">
-                      {row.username}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {row.name}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
-                      {row.email}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {row.country}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {row.date}
-                    </td>
-                    <td className="px-8 py-5">
-                      <StatusBadge type="approval" status={row.approval} />
-                    </td>
-                    <td className="px-8 py-5">
-                      <StatusBadge type="user" status={row.status} />
-                    </td>
-                    <td className="px-8 py-5">
-                      <div className="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2.5 bg-[#FB2C3633] text-[#FF6467] rounded-xl hover:bg-[#F0443833] transition-all cursor-pointer">
-                          <IoMdTrash size={18} />
-                        </button>
-                        <button className="p-2.5 bg-[#2B7FFF33] text-[#51A2FF] rounded-xl hover:bg-[#AD46FF33] transition-all cursor-pointer">
-                          <IoMdEye size={18} />
-                        </button>
-                      </div>
+                {loading ? (
+                  Array(5)
+                    .fill(0)
+                    .map((_, idx) => (
+                      <tr key={idx} className="animate-pulse">
+                        <td colSpan={8} className="px-8 py-5">
+                          <div className="h-4 bg-white/5 rounded w-full"></div>
+                        </td>
+                      </tr>
+                    ))
+                ) : filteredRequests.length > 0 ? (
+                  filteredRequests.map((row: any, idx: number) => (
+                    <tr
+                      key={idx}
+                      className="hover:bg-white/5 transition-colors group"
+                    >
+                      <td className="px-8 py-5 text-white font-medium text-sm">
+                        {row.username || row.user_name || "N/A"}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                        {row.name || row.first_name || "N/A"}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
+                        {row.email || "N/A"}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                        {row.country || "N/A"}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                        {row.date || row.created_at || row.joined_at || "N/A"}
+                      </td>
+                      <td className="px-8 py-5">
+                        <StatusBadge
+                          type="approval"
+                          status={row.approval || row.approval_status || "pending"}
+                        />
+                      </td>
+                      <td className="px-8 py-5">
+                        <StatusBadge
+                          type="user"
+                          status={
+                            row.status || String(row.is_active || row.active || "inactive") 
+                          }
+                        />
+                      </td>
+                      <td className="px-8 py-5">
+                        <div className="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                          <button className="p-2.5 bg-[#FB2C3633] text-[#FF6467] rounded-xl hover:bg-[#F0443833] transition-all cursor-pointer">
+                            <IoMdTrash size={18} />
+                          </button>
+                          <button className="p-2.5 bg-[#2B7FFF33] text-[#51A2FF] rounded-xl hover:bg-[#AD46FF33] transition-all cursor-pointer">
+                            <IoMdEye size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      className="px-8 py-20 text-center text-[#98A2B3]"
+                    >
+                      No affiliate requests found.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -337,8 +345,15 @@ const AffiliateRequests = () => {
           {/* Pagination */}
           <div className="p-8 flex flex-col md:flex-row gap-3 items-center justify-between border-t border-[#C27AFF1A]">
             <p className="text-[#98A2B3] text-xs md:text-sm">
-              Showing <span className="text-white font-medium">1-10</span> of{" "}
-              <span className="text-white font-medium">17</span> entries
+              Showing{" "}
+              <span className="text-white font-medium">
+                1-{Math.min(filteredRequests.length, 10)}
+              </span>{" "}
+              of{" "}
+              <span className="text-white font-medium">
+                {filteredRequests.length}
+              </span>{" "}
+              entries
             </p>
             <div className="flex items-center gap-2">
               <button className="p-2 border flex gap-2 items-center border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] cursor-pointer">

@@ -1,4 +1,9 @@
+"use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signup } from "@/lib/auth";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import {
   HiOutlineMail,
@@ -7,16 +12,59 @@ import {
   HiOutlineCalendar,
 } from "react-icons/hi";
 import AuthLayout from "../../components/auth/AuthLayout";
+import Input from "@/components/inputField/input";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data: any) => {
+    try {
+      if (data.password !== data["confirm password"]) {
+        setError("Passwords do not match");
+        return;
+      }
+
+      setError("");
+      await signup(data);
+      router.push("/admin");
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Signup failed. Please try again."
+      );
+    }
+  };
   return (
     <AuthLayout
       title="Create Account"
       subtitle="Join the Ultimate Casino Experience"
     >
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {error && (
+          <div className="p-3 bg-red-500/10 border border-red-500/50 rounded text-red-500 text-sm text-center">
+            {error}
+          </div>
+        )}
+
         {/* Username Field */}
-        <div className="space-y-1">
+        <div className="">
+          <Input
+            type="text"
+            label="User Name"
+            placeholder="Choose your username"
+            icon={HiOutlineUser}
+            name="UserName"
+            register={register}
+            errors={errors}
+            validation={{ required: "User name is required" }}
+          />
+        </div>
+        {/* <div className="">
           <label className="text-gray-400 text-xs font-medium ml-1">
             Username
           </label>
@@ -25,86 +73,89 @@ export default function SignupPage() {
               <HiOutlineUser size={18} />
             </div>
             <input
+              {...register("UserName", { required: true })}
               type="text"
               placeholder="Choose your username"
               className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
             />
           </div>
-        </div>
+          {errors.UserName && (
+            <span className="text-red-400 text-xs">This field is required</span>
+          )}
+        </div> */}
 
         {/* Email Field */}
-        <div className="space-y-1">
-          <label className="text-gray-400 text-xs font-medium ml-1">
-            Email
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#C27AFFB2]">
-              <HiOutlineMail size={18} />
-            </div>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
-            />
-          </div>
+        <div className="">
+          <Input
+            type="email"
+            label="Email"
+            placeholder="Enter your email"
+            icon={HiOutlineMail}
+            name="email"
+            register={register}
+            errors={errors}
+            validation={{
+              required: "Email Address is required",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Invalid email address",
+              },
+            }}
+          />
         </div>
 
         {/* Date of Birth Field */}
-        <div className="space-y-1">
-          <label className="text-gray-400 text-xs font-medium ml-1">
-            Date of Birth
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#C27AFFB2]">
-              <HiOutlineCalendar size={18} />
-            </div>
-            <input
-              type="date"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm scheme-dark"
-            />
-          </div>
-          <p className="text-[10px] text-gray-600 pl-1">
-            You must be 18+ to play
-          </p>
+        <div className="">
+          <Input
+            type="date"
+            label="Date of Birth"
+            placeholder="Date of birth"
+            icon={HiOutlineCalendar}
+            name="date"
+            register={register}
+            errors={errors}
+            validation={{
+              required: "Date is required",
+            }}
+          />
         </div>
 
         {/* Password Field */}
-        <div className="space-y-1">
-          <label className="text-gray-400 text-xs font-medium ml-1">
-            Password
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#C27AFFB2]">
-              <HiOutlineLockClosed size={18} />
-            </div>
-            <input
-              type="password"
-              placeholder="Create a strong password"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
-            />
-          </div>
+        <div className="">
+          <Input
+            type="password"
+            label="Password"
+            placeholder="Create a strong password"
+            icon={HiOutlineLockClosed}
+            name="password"
+            register={register}
+            errors={errors}
+            validation={{
+              required: "Password is required",
+            }}
+          />
         </div>
 
         {/* Confirm Password Field */}
-        <div className="space-y-1">
-          <label className="text-gray-400 text-xs font-medium ml-1">
-            Confirm Password
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#C27AFFB2]">
-              <HiOutlineLockClosed size={18} />
-            </div>
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
-            />
-          </div>
+        <div className="">
+          <Input
+            type="password"
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            icon={HiOutlineLockClosed}
+            name="confirm password"
+            register={register}
+            errors={errors}
+            validation={{
+              required: "This field is required",
+            }}
+          />
         </div>
 
         {/* Terms */}
         <div className="flex items-start text-xs pt-2">
           <input
+            {...register("Agreement", { required: true })}
             type="checkbox"
             className="mt-0.5 mr-2 rounded bg-[#0a0a10] border-white/10 focus:ring-primary text-primary cursor-pointer"
           />
@@ -125,10 +176,16 @@ export default function SignupPage() {
             </Link>
           </span>
         </div>
+        {errors.Checkbox && (
+          <span className="text-red-400 text-xs">Please check the box</span>
+        )}
 
         {/* Submit Button */}
-        <button className="w-full bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)]  hover:from-primary/90 hover:to-secondary/90 text-white py-3 rounded-lg transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm mt-2 cursor-pointer">
-          Create Account
+        <button
+          disabled={isSubmitting}
+          className="w-full bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)]  hover:from-primary/90 hover:to-secondary/90 text-white py-3 rounded-lg transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm mt-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? "Creating Account..." : "Create Account"}
         </button>
 
         {/* Alternative Signup */}

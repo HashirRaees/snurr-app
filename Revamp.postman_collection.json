@@ -1,0 +1,3364 @@
+{
+	"info": {
+		"_postman_id": "b8f525c6-126a-493b-bdfd-9f41a6fa039b",
+		"name": "Revamp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25554553",
+		"_collection_link": "https://gold-zodiac-322004.postman.co/workspace/Bigtime~e0a858f4-40c1-41f7-8b50-374487393c86/collection/37796777-b8f525c6-126a-493b-bdfd-9f41a6fa039b?action=share&source=collection_link&creator=25554553"
+	},
+	"item": [
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/statistics/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"statistics",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Monthly Deposits & Withdraws",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/monthly-deposits-withdraws/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"monthly-deposits-withdraws",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Weekly Deposits & Withdraws",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/weekly-deposits-withdraws/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"weekly-deposits-withdraws",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Games Overview",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/games-overview/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"games-overview",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Game Sessions List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/game-sessions-list/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"game-sessions-list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Game Wise Wagered Count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/game-wise-wagered-count/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"game-wise-wagered-count",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Game Wise Bet Amount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/dashboard/game-wise-bet-amount/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"game-wise-bet-amount",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CMS",
+			"item": [
+				{
+					"name": "Retrieve CMS settings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}/api/settings/cms/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"cms",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}/api/settings/cms/1/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"cms",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_TOKEN_HERE"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "site_title",
+									"value": "My Casino Site",
+									"type": "text"
+								},
+								{
+									"key": "site_icon",
+									"type": "file",
+									"src": "/path/to/icon.png"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/path/to/logo.png"
+								},
+								{
+									"key": "menu_text1",
+									"value": "Home",
+									"type": "text"
+								},
+								{
+									"key": "menu_text2",
+									"value": "Games",
+									"type": "text"
+								},
+								{
+									"key": "menu_text3",
+									"value": "Bonuses",
+									"type": "text"
+								},
+								{
+									"key": "menu_text4",
+									"value": "About",
+									"type": "text"
+								},
+								{
+									"key": "menu_text5",
+									"value": "Contact",
+									"type": "text"
+								},
+								{
+									"key": "menu_btn1",
+									"value": "Login",
+									"type": "text"
+								},
+								{
+									"key": "menu_btn2",
+									"value": "Sign Up",
+									"type": "text"
+								},
+								{
+									"key": "banner_heading",
+									"value": "Welcome to Our Casino",
+									"type": "text"
+								},
+								{
+									"key": "banner_text",
+									"value": "Play the best casino games and win big!",
+									"type": "text"
+								},
+								{
+									"key": "banner_bg_img",
+									"type": "file",
+									"src": "/path/to/banner-bg.jpg"
+								},
+								{
+									"key": "banner_side_img",
+									"type": "file",
+									"src": "/path/to/banner-side.jpg"
+								},
+								{
+									"key": "banner_btn",
+									"type": "file",
+									"src": "/path/to/banner-button.png"
+								},
+								{
+									"key": "welcome_heading",
+									"value": "Welcome Section",
+									"type": "text"
+								},
+								{
+									"key": "welcome_text",
+									"value": "Experience the thrill of online gaming",
+									"type": "text"
+								},
+								{
+									"key": "welcome_bg",
+									"type": "file",
+									"src": "/path/to/welcome-bg.jpg"
+								},
+								{
+									"key": "welcome_btn",
+									"type": "file",
+									"src": "/path/to/welcome-button.png"
+								},
+								{
+									"key": "winner_heading",
+									"value": "Top Winners",
+									"type": "text"
+								},
+								{
+									"key": "winner_bg",
+									"type": "file",
+									"src": "/path/to/winner-bg.jpg"
+								},
+								{
+									"key": "winner_side_image",
+									"type": "file",
+									"src": "/path/to/winner-side.jpg"
+								},
+								{
+									"key": "winner_btn",
+									"type": "file",
+									"src": "/path/to/winner-button.png"
+								},
+								{
+									"key": "winner_theading1",
+									"value": "Player",
+									"type": "text"
+								},
+								{
+									"key": "winner_theading2",
+									"value": "Game",
+									"type": "text"
+								},
+								{
+									"key": "winner_theading3",
+									"value": "Amount",
+									"type": "text"
+								},
+								{
+									"key": "winner_tdata1",
+									"value": "John Doe",
+									"type": "text"
+								},
+								{
+									"key": "winner_tdata2",
+									"value": "Slot Machine",
+									"type": "text"
+								},
+								{
+									"key": "winner_tdata3",
+									"value": "$10,000",
+									"type": "text"
+								},
+								{
+									"key": "footer_contact_header",
+									"value": "Contact Us",
+									"type": "text"
+								},
+								{
+									"key": "footer_phone_no",
+									"value": "+1-234-567-8900",
+									"type": "text"
+								},
+								{
+									"key": "footer_email",
+									"value": "support@casino.com",
+									"type": "text"
+								},
+								{
+									"key": "footer_address",
+									"value": "123 Casino Street, Las Vegas, NV",
+									"type": "text"
+								},
+								{
+									"key": "subscribe_header",
+									"value": "Subscribe to Newsletter",
+									"type": "text"
+								},
+								{
+									"key": "subscribe_input_text",
+									"value": "Enter your email",
+									"type": "text"
+								},
+								{
+									"key": "subscribe_btn",
+									"value": "Subscribe",
+									"type": "text"
+								},
+								{
+									"key": "copy_right_statement",
+									"value": "© 2024 My Casino. All rights reserved.",
+									"type": "text"
+								},
+								{
+									"key": "chat_script",
+									"value": "<script>// Chat widget</script>",
+									"type": "text"
+								},
+								{
+									"key": "sendgrid_secret",
+									"value": "SG.xxxxxxxxxxxxx",
+									"type": "text"
+								},
+								{
+									"key": "stripe_form",
+									"value": "<form>// Stripe form</form>",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/settings/cms/2/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"settings",
+								"cms",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Specific Image Field",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_TOKEN_HERE"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"field_name\": \"site_icon\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/settings/cms/remove-image/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"settings",
+								"cms",
+								"remove-image",
+								""
+							]
+						},
+						"description": "StartFragment\n\n### Available Field Names for Removal:\n\n- site_icon, logo\n    \n- banner_side_img, banner_bg_img, banner_btn\n    \n- welcome_bg, welcome_btn\n    \n- winner_bg, winner_side_image, winner_btn\n    \n- promotion_bg, promotion_side_img, promotion1_bg\n    \n- promotion1_icon1, promotion1_icon2, promotion1_icon3, promotion1_icon4, promotion1_icon5\n    \n- top_footer_bg, top_footer_icon1, top_footer_icon2, top_footer_icon3\n    \n- footer_payment_icon1, footer_payment_icon2, footer_payment_icon3, footer_payment_icon4\n    \n- client_img1, client_img2, client_img3, client_img4, client_img5, client_promo_icon1\n    \n\nEndFragment"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Affiliate",
+			"item": [
+				{
+					"name": "Requests",
+					"item": [
+						{
+							"name": "List All Requests",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/requests/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"requests",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Show Specific Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/1/show/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"1",
+										"show",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approve Request",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"requestID\": 2, \"pro_parent\": \"AFF001\", \"affiliate_percentage\": \"10\", \"page\": \"show\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/approve/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"approve",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reject Request",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"requestID\": 1, \"comments\": \"Rejection reason\", \"page\": \"show\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/reject/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"reject",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "List Affiliate Users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/users/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Affiliate Code",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"pro_parent\": \"AFF001\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/check-code/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"check-code",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"first_name\": \"John\", \"last_name\": \"Doe\", \"email\": \"john@example.com\", \"user_name\": \"johndoe\", \"country\": \"USA\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List all (pending/accepted/rejected)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"first_name\": \"Jane\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/18/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"18",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/18/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"18",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Withdrawals",
+					"item": [
+						{
+							"name": "List Withdrawals",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/withdraws/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"withdraws",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create withdrawal",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"amount\": 100, \"w_bank_name\": \"Bank Name\", \"ibpn\": \"IBAN123\", \"swift\": \"SWIFT123\", \"w_currency\": \"USD\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/withdraw/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"withdraw",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel withdrawal",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-users/1/cancel-withdraw/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-users",
+										"1",
+										"cancel-withdraw",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Media",
+					"item": [
+						{
+							"name": "List All Media",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Active Media",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/active/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"active",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Media With Files",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/1/view/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"1",
+										"view",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create media",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"Media Name\", \"type\": \"image\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Media By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/2/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Media",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"Updated Name\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/2/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Media",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/2/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Save Template",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Template Name",
+											"type": "text"
+										},
+										{
+											"key": "template_type",
+											"value": "image",
+											"type": "text"
+										},
+										{
+											"key": "file_type",
+											"value": "image",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/C:/Users/abbas/Downloads/github-recovery-codes.txt"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/save-template/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"save-template",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Status",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media/5/change-status/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media",
+										"5",
+										"change-status",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Media Files",
+					"item": [
+						{
+							"name": "List All Files",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create File",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"parent_media\": 1, \"name\": \"File Name\", \"type\": \"image\", \"source\": \"file.png\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get File By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/4/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update File",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"Updated File Name\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/4/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete File",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/4/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Save Media Files",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "parent_media",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "File Name",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "image",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/C:/Users/abbas/Downloads/output.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/save/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										"save",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Media File",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Updated Name",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "image",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "newfile.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/3/update/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										"3",
+										"update",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download File",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-media-files/3/download/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-media-files",
+										"3",
+										"download",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Settings",
+					"item": [
+						{
+							"name": "List All Settings",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-settings/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-settings",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Setting",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"mrp_players\": \"100\",\n    \"mrp_month\": 1,\n    \"mrp_deposit\": 1000,\n    \"affiliate_revenue\": 10,\n    \"affiliate_player_bonus\": 5,\n    \"affiliate_player_bonus_rollover\": \"3x\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-settings/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-settings",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Setting By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-settings/2/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-settings",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Setting",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"mrp_players\": \"200\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-settings/2/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-settings",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Setting",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-settings/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-settings",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List Affiliates",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/list-affiliates/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"list-affiliates",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"Affiliate Name\", \"email\": \"affiliate@example.com\", \"ref_key\": \"AFF001\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/list-affiliates/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"list-affiliates",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/list-affiliates/20/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"list-affiliates",
+										"20",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/list-affiliates/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"list-affiliates",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"Updated Name\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/list-affiliates/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"list-affiliates",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "API History",
+					"item": [
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-history/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-history",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-history/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-history",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-history/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-history",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"api_type\": \"sync\", \"source_fun\": \"import_players\", \"host\": \"example.com\", \"user_id\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-history/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-history",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-history/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-history",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "API Settings",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-settings/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-settings",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"partner_list\": 1, \"player_import\": 1, \"sync_players\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-settings/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-settings",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-settings/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-settings",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"player_import\": 0}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-settings/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-settings",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-api-settings/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-api-settings",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bonuses",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-bonuses/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-bonuses",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"deposit_id\": 1, \"user_id\": 1, \"aff_id\": 1, \"amount\": 100, \"tokens\": 50}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-bonuses/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-bonuses",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-bonuses/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-bonuses",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"amount\": 200}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/affiliates/affiliate-bonuses/1/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-bonuses",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affiliate-bonuses/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affiliate-bonuses",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Pro Affiliate Transactions",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/pro-affiliate-transactions/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"pro-affiliate-transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"user_id\": 1, \"aff_id\": 1, \"transaction_type\": \"commission\", \"amount\": 100, \"description\": \"Commission payment\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/pro-affiliate-transactions/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"pro-affiliate-transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/pro-affiliate-transactions/3237/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"pro-affiliate-transactions",
+										"3237",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"amount\": 200}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/pro-affiliate-transactions/3237/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"pro-affiliate-transactions",
+										"3237",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/pro-affiliate-transactions/3237/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"pro-affiliate-transactions",
+										"3237",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Affilka Visitor History",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affilka-visitor-history/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affilka-visitor-history",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"stag\": \"visitor123\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affilka-visitor-history/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affilka-visitor-history",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affilka-visitor-history/5/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affilka-visitor-history",
+										"5",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"status\": 0}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affilka-visitor-history/5/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affilka-visitor-history",
+										"5",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"status\": 0}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/affiliates/affilka-visitor-history/5/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"affiliates",
+										"affilka-visitor-history",
+										"5",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "List All Tickets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ticket Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/1/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Ticket Contents (and mark as read)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/2/fetch-contents/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"2",
+								"fetch-contents",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Ticket Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"ticket_id\": 2, \"status\": 4}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/update-status/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"update-status",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message to Ticket",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"ticket_number\": \"GfefuEwexN\", \"content\": \"This is a reply message\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/send-message/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"send-message",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Ticket",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Ticket",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/1/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Ticket",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/api/support/tickets/1/",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"api",
+								"support",
+								"tickets",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer Information",
+			"item": [
+				{
+					"name": "Online Customers",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/online-customers/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"online-customers",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Details",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/1/online-customer-view/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"1",
+										"online-customer-view",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/1/logout-online-customer/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"1",
+										"logout-online-customer",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customers",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/customers/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"customers",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Details",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/1/customer-view/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"1",
+										"customer-view",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search (GET)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/customer-search/?data=john@example.com",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"customer-search",
+										""
+									],
+									"query": [
+										{
+											"key": "data",
+											"value": "john@example.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search (POST)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"data\": \"john@example.com\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/users/customer-search/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"customer-search",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Leave Notes",
+					"item": [
+						{
+							"name": "List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/users/1/leave-notes/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"1",
+										"leave-notes",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{body:",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/users/1/create-leave-note/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"1",
+										"create-leave-note",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "FAQ",
+			"item": [
+				{
+					"name": "FAQ Categories",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/help-categories/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"help-categories",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"General Questions\", \"status\": 1, \"order_no\": 1, \"icon\": \"fa-question\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/help-categories/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"help-categories",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/help-categories/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"help-categories",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"Updated Category\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/help-categories/6/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"help-categories",
+										"6",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/help-categories/6/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"help-categories",
+										"6",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FAQs",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"category\": 1, \"question\": \"What is this?\", \"answer\": \"This is an answer\", \"status\": 1, \"order_no\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create with Files",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "category",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "question",
+											"value": "What is this?",
+											"type": "text"
+										},
+										{
+											"key": "answer",
+											"value": "This is an answer",
+											"type": "text"
+										},
+										{
+											"key": "status",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "order_no",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/C:/Users/abbas/Downloads/Gods of Egypt (2016) 1080p.BluRay.torrent"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"question\": \"Updated question\", \"answer\": \"Updated answer\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update with Files",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "question",
+											"value": "Updated question",
+											"type": "text"
+										},
+										{
+											"key": "answer",
+											"value": "Updated answer",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/path/to/image.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Media",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"media_id\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faqs/1/delete-media/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faqs",
+										"1",
+										"delete-media",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FAQ media",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/faq-media/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faq-media",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"faq\": 1, \"category\": 1, \"src\": \"image.jpg\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faq-media/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faq-media",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/faq-media/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faq-media",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"status\": 0}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/support/faq-media/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faq-media",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/support/faq-media/1/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"support",
+										"faq-media",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "localhost",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

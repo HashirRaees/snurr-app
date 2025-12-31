@@ -1,47 +1,80 @@
+"use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { login } from "@/lib/auth";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
 import AuthLayout from "../../components/auth/AuthLayout";
+import Input from "@/components/inputField/input";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data: any) => {
+    try {
+      setError("");
+      await login(data);
+      router.push("/admin");
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    }
+  };
   return (
     <AuthLayout
       title="Welcome Back"
       subtitle="Join the Ultimate Casino Experience"
     >
-      <form className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {error && (
+          <div className="p-3 bg-red-500/10 border border-red-500/50 rounded text-red-500 text-sm text-center">
+            {error}
+          </div>
+        )}
+
         {/* Email Field */}
         <div className="space-y-1">
-          <label className="text-gray-400 text-xs font-medium ml-1">
-            Email
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#C27AFFB2]">
-              <HiOutlineMail size={20} />
-            </div>
-            <input
-              type="email"
-              placeholder="player@example.com"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
-            />
-          </div>
+          <Input
+            type="email"
+            label="Email"
+            placeholder="player@example.com"
+            icon={HiOutlineMail}
+            name="email"
+            register={register}
+            errors={errors}
+            validation={{
+              required: "Email Address is required",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Invalid email address",
+              },
+            }}
+          />
         </div>
 
         {/* Password Field */}
         <div className="space-y-1">
-          <label className="text-gray-400 text-xs font-medium ml-1">
-            Password
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#C27AFFB2]">
-              <HiOutlineLockClosed size={20} />
-            </div>
-            <input
-              type="password"
-              placeholder="........"
-              className="w-full bg-[#0a0a10] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
-            />
-          </div>
+          <Input
+            type="password"
+            label="Password"
+            placeholder="........"
+            icon={HiOutlineLockClosed}
+            name="password"
+            register={register}
+            errors={errors}
+            validation={{
+              required: "Password is required",
+            }}
+          />
         </div>
 
         {/* Remember / Forgot */}
@@ -62,8 +95,11 @@ export default function LoginPage() {
         </div>
 
         {/* Submit Button */}
-        <button className="w-full py-3 bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)] text-white transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm rounded-md cursor-pointer">
-          Sign In
+        <button
+          disabled={isSubmitting}
+          className="w-full py-3 bg-[linear-gradient(90deg,#9810FA_0%,#AD46FF_50%,#E60076_100%)] text-white transition-all shadow-[0_0_15px_rgba(160,32,240,0.4)] text-sm rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? "Signing in..." : "Sign In"}
         </button>
 
         {/* Divider */}
