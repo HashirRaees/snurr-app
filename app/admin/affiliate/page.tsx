@@ -263,7 +263,7 @@ const AffiliateRequests = () => {
                   <th className="px-8 py-5">User Name</th>
                   <th className="px-8 py-5">Name</th>
                   <th className="px-8 py-5">Email</th>
-                  <th className="px-8 py-5">Country</th>
+                  <th className="px-8 py-5">City</th>
                   <th className="px-8 py-5">Register Date</th>
                   <th className="px-8 py-5">Approval Status</th>
                   <th className="px-8 py-5">User Status</th>
@@ -297,7 +297,7 @@ const AffiliateRequests = () => {
                         {row.email || "N/A"}
                       </td>
                       <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                        {row.country || "N/A"}
+                        {row.city || "N/A"}
                       </td>
                       <td className="px-8 py-5 text-[#98A2B3] text-sm">
                         {row.date || row.created_at || row.joined_at || "N/A"}
