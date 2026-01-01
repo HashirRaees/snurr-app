@@ -1,23 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../../../components/admin/Navbar";
-import { IoMdSearch } from "react-icons/io";
+import axiosInstance from "@/lib/axios";
+import { IoMdSearch, IoMdTrash } from "react-icons/io";
 import { FiPrinter, FiCopy } from "react-icons/fi";
 import { LuPlus } from "react-icons/lu";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FaRegFolderOpen } from "react-icons/fa";
+import { MdModeEditOutline } from "react-icons/md";
 
 const FAQCategoriesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const categories = [
-    { orderNo: 1, category: "General Settings", status: "Active" },
-    { orderNo: 2, category: "Bonus", status: "Active" },
-    { orderNo: 3, category: "Financial", status: "Active" },
-    { orderNo: 4, category: "Quantity", status: "Active" },
-  ];
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get("/api/support/help-categories/");
+      let rawData = response.data;
+      if (rawData && typeof rawData === "object" && !Array.isArray(rawData)) {
+        rawData = rawData.results || rawData.data || rawData.categories || [];
+      }
+      setData(Array.isArray(rawData) ? rawData : []);
+    } catch (err: any) {
+      console.error("Failed to fetch FAQ categories:", err);
+      setError("Failed to load categories.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleDelete = async (id: number | string) => {
+    if (!window.confirm("Are you sure you want to delete this category?")) {
+      return;
+    }
+
+    try {
+      await axiosInstance.delete(`/api/support/help-categories/${id}/`);
+      // Refresh the list after successful deletion
+      fetchCategories();
+    } catch (err: any) {
+      console.error("Failed to delete category:", err);
+      alert("Failed to delete category. Please try again.");
+    }
+  };
+
+  const filteredCategories = data.filter((cat) => {
+    const name = String(cat.name || "").toLowerCase();
+    return name.includes(searchTerm.toLowerCase());
+  });
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "N/A";
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch (e) {
+      return "N/A";
+    }
+  };
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -57,14 +105,20 @@ const FAQCategoriesPage = () => {
                 View FAQs
               </button>
             </Link>
-            <Link href="/admin/faq/add">
+            <Link href="/admin/faq/add-category">
               <button className="px-6 py-3 rounded-xl shadow-[0_10px_15px_-3px_#AD46FF4D] bg-[#AD46FF] text-white text-sm font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all cursor-pointer">
                 <LuPlus size={20} className="stroke-[3px]" />
-                Add New
+                Add New Category
               </button>
             </Link>
           </div>
         </div>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-500 text-sm">
+            {error}
+          </div>
+        )}
 
         {/* Table Container */}
         <div className="bg-[#10182899] border border-[#1E293980] rounded-[32px] overflow-hidden backdrop-blur-md">
@@ -99,39 +153,87 @@ const FAQCategoriesPage = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#C27AFF1A] text-[#98A2B3] text-[11px] font-bold uppercase tracking-widest">
-                  <th className="px-8 py-5 w-[100px]">Order No</th>
-                  <th className="px-8 py-5">Category</th>
-                  <th className="px-8 py-5 w-[150px] text-center">Status</th>
-                  <th className="px-8 py-5 w-[150px] text-right">Action</th>
+                <tr className="border-b border-[#C27AFF1A] text-[#98A2B3] text-xs tracking-widest">
+                  <th className="px-8 py-5">ID</th>
+                  <th className="px-8 py-5">Order No</th>
+                  <th className="px-8 py-5">Name</th>
+                  <th className="px-8 py-5 text-center">Status</th>
+                  <th className="px-8 py-5">Created At</th>
+                  <th className="px-8 py-5">Updated At</th>
+                  <th className="px-8 py-5 w-[150px] text-center">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#C27AFF11]">
-                {categories.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-white/5 transition-colors group"
-                  >
-                    <td className="px-8 py-5 text-white font-medium text-sm w-[100px]">
-                      {row.orderNo}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {row.category}
-                    </td>
-                    <td className="px-8 py-5 w-[150px] text-center">
-                      <span className="px-4 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider border bg-[#00C95033] text-[#05DF72] border-[#00C9504D]">
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className="px-8 py-5 w-[150px]">
-                      <div className="flex items-center justify-end">
-                        <button className="px-6 py-2 bg-[linear-gradient(90deg,#2D7FFF_0%,#0062FF_100%)] text-white text-xs font-bold rounded-lg shadow-[0_0_15px_rgba(45,127,255,0.4)] hover:scale-105 transition-all cursor-pointer">
-                          Edit
-                        </button>
-                      </div>
+                {loading ? (
+                  Array(5)
+                    .fill(0)
+                    .map((_, idx) => (
+                      <tr key={idx} className="animate-pulse">
+                        <td colSpan={7} className="px-8 py-5">
+                          <div className="h-4 bg-white/5 rounded w-full"></div>
+                        </td>
+                      </tr>
+                    ))
+                ) : filteredCategories.length > 0 ? (
+                  filteredCategories.map((row: any, idx: number) => {
+                    const isActive = String(row.status) === "1";
+                    return (
+                      <tr
+                        key={idx}
+                        className="hover:bg-white/5 transition-colors group"
+                      >
+                        <td className="px-8 py-5 text-white font-medium text-sm w-[100px]">
+                          {row.id || 0}
+                        </td>
+                        <td className="px-8 py-5 text-white font-medium text-sm w-[100px]">
+                          {row.order_no || 0}
+                        </td>
+                        <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                          {row.name || "N/A"}
+                        </td>
+                        <td className="px-8 py-5 text-center">
+                          <span
+                            className={`px-4 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider border ${
+                              isActive
+                                ? "bg-[#00C95033] text-[#05DF72] border-[#00C9504D]"
+                                : "bg-[#F044381A] text-[#F04438] border-[#F0443833]"
+                            }`}
+                          >
+                            {isActive ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                          {formatDate(row.created_at)}
+                        </td>
+                        <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                          {formatDate(row.updated_at)}
+                        </td>
+                        <td className="px-8 py-5">
+                          <div className="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => handleDelete(row.id)}
+                              className="p-2.5 bg-[#FB2C3633] text-[#FF6467] rounded-xl hover:bg-[#F0443833] transition-all cursor-pointer"
+                            >
+                              <IoMdTrash size={18} />
+                            </button>
+                            <button onClick={() => console.log(row.id)} className="p-2.5 bg-[#2B7FFF33] text-[#51A2FF] rounded-xl hover:bg-[#AD46FF33] transition-all cursor-pointer">
+                              <MdModeEditOutline size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-8 py-20 text-center text-[#98A2B3]"
+                    >
+                      No categories found.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -139,9 +241,15 @@ const FAQCategoriesPage = () => {
           {/* Pagination */}
           <div className="p-8 flex gap-3 flex-col md:flex-row items-center justify-between border-t border-[#C27AFF1A]">
             <p className="text-[#98A2B3] text-xs md:text-sm">
-              Showing <span className="text-white font-medium">1</span> to{" "}
-              <span className="text-white font-medium">4</span> of{" "}
-              <span className="text-white font-medium">4</span> entries
+              Showing{" "}
+              <span className="text-white font-medium">
+                1-{Math.min(filteredCategories.length, 10)}
+              </span>{" "}
+              of{" "}
+              <span className="text-white font-medium">
+                {filteredCategories.length}
+              </span>{" "}
+              entries
             </p>
             <div className="flex items-center gap-2">
               <button className="md:px-4 px-3 py-1 md:py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-xs md:text-sm flex items-center gap-2 cursor-pointer">

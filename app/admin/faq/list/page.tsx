@@ -1,79 +1,86 @@
-"use client";
-
-import { useState } from "react";
+'use client'
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../../../components/admin/Navbar";
-import { IoMdSearch } from "react-icons/io";
+import axiosInstance from "@/lib/axios";
+import { IoMdSearch, IoMdTrash } from "react-icons/io";
 import { FiPrinter, FiCopy } from "react-icons/fi";
 import { LuPlus } from "react-icons/lu";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FaRegQuestionCircle } from "react-icons/fa";
+import { MdModeEditOutline } from "react-icons/md";
 
 const FAQListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [categories, setCategories] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const faqs = [
-    {
-      orderNo: 1,
-      question: "How Can I Deposit Money?",
-      answer: "To make a deposit, log in...",
-      status: "Active",
-    },
-    {
-      orderNo: 2,
-      question: "Can I try out the games w...",
-      answer: "On game selection you can...",
-      status: "Active",
-    },
-    {
-      orderNo: 3,
-      question: "How do I request a withdr...",
-      answer: "To request a withdrawal...",
-      status: "Active",
-    },
-    {
-      orderNo: 4,
-      question: "Does Propersix offer free...",
-      answer: "There are multiple offe...",
-      status: "Active",
-    },
-    {
-      orderNo: 5,
-      question: "Are casino games fair?",
-      answer: "Casino results are proved...",
-      status: "Active",
-    },
-    {
-      orderNo: 6,
-      question: "Do I need to be a client...",
-      answer: "You can try demo versions...",
-      status: "Active",
-    },
-    {
-      orderNo: 7,
-      question: "What happens if I lose lo...",
-      answer: "Lorem ipsum dolor sit ame...",
-      status: "Inactive",
-    },
-    {
-      orderNo: 8,
-      question: "I run into a technical pr...",
-      answer: "We've thoroughly tested a...",
-      status: "Active",
-    },
-    {
-      orderNo: 9,
-      question: "Fort Testing",
-      answer: "For Testing",
-      status: "Active",
-    },
-    {
-      orderNo: 10,
-      question: "Where can I see my transa...",
-      answer: "To view your transaction...",
-      status: "Active",
-    },
-  ];
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [faqRes, catRes] = await Promise.all([
+        axiosInstance.get("/api/support/faqs/"),
+        axiosInstance.get("/api/support/help-categories/"),
+      ]);
+
+      // Handle FAQ results
+      let faqData = faqRes.data;
+      if (faqData && typeof faqData === "object" && !Array.isArray(faqData)) {
+        faqData = faqData.results || faqData.data || [];
+      }
+      setFaqs(Array.isArray(faqData) ? faqData : []);
+
+      // Handle Category mapping
+      let catData = catRes.data;
+      if (catData && typeof catData === "object" && !Array.isArray(catData)) {
+        catData = catData.results || catData.data || [];
+      }
+      const catMap: { [key: string]: string } = {};
+      if (Array.isArray(catData)) {
+        catData.forEach((c: any) => {
+          catMap[String(c.id)] = c.name;
+        });
+      }
+      setCategories(catMap);
+    } catch (err: any) {
+      console.error("Failed to fetch FAQ data:", err);
+      setError("Failed to load FAQs.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleDelete = async (id: number | string) => {
+    if (!window.confirm("Are you sure you want to delete this FAQ?")) {
+      return;
+    }
+
+    try {
+      await axiosInstance.delete(`/api/support/faqs/${id}/`);
+      fetchData();
+    } catch (err: any) {
+      console.error("Failed to delete FAQ:", err);
+      alert("Failed to delete FAQ. Please try again.");
+    }
+  };
+
+  const filteredFaqs = faqs.filter((faq) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      String(faq.question || "")
+        .toLowerCase()
+        .includes(search) ||
+      String(faq.answer || "")
+        .toLowerCase()
+        .includes(search)
+    );
+  });
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -111,10 +118,10 @@ const FAQListPage = () => {
                 Categories
               </button>
             </Link>
-            <Link href="/admin/faq/add">
+            <Link href="/admin/faq/add-faq">
               <button className="px-6 py-3 rounded-xl shadow-[0_10px_15px_-3px_#AD46FF4D] bg-[#AD46FF] text-white text-sm font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all cursor-pointer">
                 <LuPlus size={20} className="stroke-[3px]" />
-                Add New
+                Add New Faq
               </button>
             </Link>
           </div>
@@ -153,49 +160,82 @@ const FAQListPage = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#C27AFF1A] text-[#98A2B3] text-[11px] font-bold uppercase tracking-widest">
-                  <th className="px-8 py-5 w-[100px]">Order No</th>
+                <tr className="border-b border-[#C27AFF1A] text-[#98A2B3] text-xs font-bold uppercase tracking-widest">
+                  <th className="px-8 py-5">ID</th>
+                  <th className="px-8 py-5">Order No</th>
                   <th className="px-8 py-5">Question</th>
-                  <th className="px-8 py-5">Answer</th>
-                  <th className="px-8 py-5 w-[120px] text-center">Status</th>
-                  <th className="px-8 py-5 w-[120px] text-right">Manage</th>
+                  <th className="px-8 py-5">Category</th>
+                  <th className="px-8 py-5 text-center">Status</th>
+                  <th className="px-8 py-5 text-right">Manage</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#C27AFF11]">
-                {faqs.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-white/5 transition-colors group"
-                  >
-                    <td className="px-8 py-5 text-white font-medium text-sm w-[100px]">
-                      {row.orderNo}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
-                      {row.question}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[300px] truncate">
-                      {row.answer}
-                    </td>
-                    <td className="px-8 py-5 w-[120px] text-center">
-                      <span
-                        className={`px-4 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider border ${
-                          row.status === "Active"
-                            ? "bg-[#00C95033] text-[#05DF72] border-[#00C9504D]"
-                            : "bg-[#FF690033] text-[#FF8904] border-[#FF69004D]"
-                        }`}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className="px-8 py-5 w-[120px]">
-                      <div className="flex items-center justify-end">
-                        <button className="px-5 py-2 bg-[linear-gradient(90deg,#2D7FFF_0%,#0062FF_100%)] text-white text-xs font-bold rounded-lg shadow-[0_0_15px_rgba(45,127,255,0.4)] hover:scale-105 transition-all cursor-pointer">
-                          Manage
-                        </button>
-                      </div>
+                {loading ? (
+                  Array(5)
+                    .fill(0)
+                    .map((_, idx) => (
+                      <tr key={idx} className="animate-pulse">
+                        <td colSpan={6} className="px-8 py-8">
+                          <div className="h-4 bg-white/5 rounded w-full"></div>
+                        </td>
+                      </tr>
+                    ))
+                ) : filteredFaqs.length > 0 ? (
+                  filteredFaqs.map((row, idx) => (
+                    <tr
+                      key={idx}
+                      className="hover:bg-white/5 transition-colors group"
+                    >
+                      <td className="px-8 py-5 text-white font-medium text-sm">
+                        {row.id}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                        {row.order_no || 0}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
+                        {row.question}
+                      </td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">
+                        {categories[String(row.category)] || row.category}
+                      </td>
+                      <td className="px-8 py-5 text-center">
+                        <span
+                          className={`px-4 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider border ${
+                            row.status === 1 ||
+                            row.status === "1" ||
+                            row.status === true
+                              ? "bg-[#00C95033] text-[#05DF72] border-[#00C9504D]"
+                              : "bg-[#FF690033] text-[#FF8904] border-[#FF69004D]"
+                          }`}
+                        >
+                          {row.status == 1 ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-8 py-5">
+                        <div className="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => handleDelete(row.id)}
+                            className="p-2.5 bg-[#FB2C3633] text-[#FF6467] rounded-xl hover:bg-[#F0443833] transition-all cursor-pointer"
+                          >
+                            <IoMdTrash size={18} />
+                          </button>
+                          <button className="p-2.5 bg-[#2B7FFF33] text-[#51A2FF] rounded-xl hover:bg-[#AD46FF33] transition-all cursor-pointer">
+                            <MdModeEditOutline size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="px-8 py-10 text-center text-[#98A2B3]"
+                    >
+                      No FAQs found.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -203,9 +243,15 @@ const FAQListPage = () => {
           {/* Pagination */}
           <div className="p-8 flex gap-3 flex-col md:flex-row items-center justify-between border-t border-[#C27AFF1A]">
             <p className="text-[#98A2B3] text-xs md:text-sm">
-              Showing <span className="text-white font-medium">1</span> to{" "}
-              <span className="text-white font-medium">10</span> of{" "}
-              <span className="text-white font-medium">27</span> entries
+              Showing{" "}
+              <span className="text-white font-medium">
+                1-{filteredFaqs.length}
+              </span>{" "}
+              of{" "}
+              <span className="text-white font-medium">
+                {filteredFaqs.length}
+              </span>{" "}
+              entries
             </p>
             <div className="flex items-center gap-2">
               <button className="md:px-4 px-3 py-1 md:py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-xs md:text-sm flex items-center gap-2 cursor-pointer">
@@ -215,12 +261,6 @@ const FAQListPage = () => {
               <div className="flex items-center gap-1">
                 <button className="md:w-10 w-8 h-8 md:h-10 flex items-center justify-center rounded-xl bg-[#AD46FF] text-white font-bold text-sm shadow-[0_0_15px_-3px_#AD46FF80] cursor-pointer">
                   1
-                </button>
-                <button className="md:w-10 w-8 h-8 md:h-10 flex items-center justify-center rounded-xl bg-[#1E293B40] border border-[#C27AFF1A] text-[#98A2B3] hover:text-white transition-all text-xs md:text-sm cursor-pointer">
-                  2
-                </button>
-                <button className="md:w-10 w-8 h-8 md:h-10 flex items-center justify-center rounded-xl bg-[#1E293B40] border border-[#C27AFF1A] text-[#98A2B3] hover:text-white transition-all text-xs md:text-sm cursor-pointer">
-                  3
                 </button>
               </div>
               <button className="md:px-4 px-3 py-1 md:py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-xs md:text-sm flex items-center gap-2 cursor-pointer">
