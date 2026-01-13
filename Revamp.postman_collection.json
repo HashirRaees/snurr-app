@@ -3347,6 +3347,405 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Bonuses & Codes",
+			"item": [
+				{
+					"name": "Propersix Bonuses",
+					"item": [
+						{
+							"name": "List All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Bonus Type Check",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"type\": \"registration\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/bonus-type-check/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"bonus-type-check",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Registration Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_name\": \"Welcome Bonus\", \"bonus_amount\": 500, \"free_spin\": 50, \"w_2\": \"01\", \"recurring\": \"w\", \"status\": 1, \"bet_size\": 0, \"lines\": 0, \"wagering_req\": 0}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/registration-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"registration-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Login Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_name\": \"Daily Login\", \"bonus_amount\": 100, \"free_spin\": 10, \"w_2\": \"01\", \"recurring\": \"w\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/login-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"login-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Deposit Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_name\": \"Deposit Bonus\", \"bonus_code\": \"DEPOSIT100\", \"free_spin\": 20, \"w_2\": \"01\", \"recurring\": \"w\", \"status\": 1, \"bonus_amount\": 1000}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/deposit-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"deposit-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Code Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_name\": \"Code Bonus\", \"bonus_code\": \"BONUS500\", \"bonus_amount\": 500, \"free_spin\": 0, \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/code-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"code-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Method Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_name\": \"Method Bonus\", \"deposit_method\": \"crypto\", \"free_spin\": 30, \"w_2\": \"01\", \"recurring\": \"w\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/method-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"method-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Cashback Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_name\": \"Cashback\", \"min_loss\": 1000, \"w_2\": \"01\", \"recurring\": \"w\", \"status\": 1}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/cashback-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"cashback-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Status",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/25/status-change/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"25",
+										"status-change",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User Bonus",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"bonus_code\": \"USER123\", \"bonus\": 500, \"bonus_type\": 1, \"valid_date\": \"2025-12-31\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/1/user-bonus/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"1",
+										"user-bonus",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add User Token",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"add_token\": 1000}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/1/add-user-token/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"1",
+										"add-user-token",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Destroy (Soft Delete)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localhost}}/api/bonuses/propersix-bonuses/25/destroy/",
+									"host": [
+										"{{localhost}}"
+									],
+									"path": [
+										"api",
+										"bonuses",
+										"propersix-bonuses",
+										"25",
+										"destroy",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		}
 	],
 	"variable": [

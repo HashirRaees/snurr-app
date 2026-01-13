@@ -1,127 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../../../components/admin/Navbar";
-import { IoMdSearch } from "react-icons/io";
 import { FiCopy, FiPrinter, FiPlus, FiTrash2 } from "react-icons/fi";
-import { MdBlock } from "react-icons/md";
+import axiosInstance from "@/lib/axios";
+
+interface Bonus {
+  id: number;
+  bonus_name: string;
+  deposit_method: string | null;
+  min_loss: string | number | null;
+  bonus_code: string;
+  type: string;
+  bonus_amount: number | null;
+  free_spin: number;
+  game: string | null;
+  bet_size: number;
+  lines: number;
+  wagering_req: number;
+  from_field: string;
+  till: string;
+  specific_day: string | null;
+  recurring: string | null;
+  w_2: string | null;
+  ex_country: string | null;
+  aff_source: string | null;
+  status: boolean;
+  percent_amount: number | null;
+  max_amount: number | null;
+  chained: string | null;
+  ex_chain: string | null;
+  users: string | null;
+  vip_level: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 const BonusesCodesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [bonuses, setBonuses] = useState<Bonus[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const bonuses = [
-    {
-      id: "PSB001",
-      name: "Bonus20",
-      token: "500",
-      spin: "0",
-      wagering: "0",
-      type: "code",
-      date: "February 23, 2021, 2:31",
-      bonusCode: "bonus20",
-      status: "Active",
-    },
-    {
-      id: "PSB0012",
-      name: "2022free50",
-      token: "50",
-      spin: "5",
-      wagering: "0",
-      type: "code",
-      date: "February 22, 2022, 12:13",
-      bonusCode: "2022free50",
-      status: "Active",
-    },
-    {
-      id: "PSB0013",
-      name: "Happy500",
-      token: "500",
-      spin: "0",
-      wagering: "0",
-      type: "code",
-      date: "February 22, 2022, 12:14",
-      bonusCode: "Happy500",
-      status: "Active",
-    },
-    {
-      id: "PSB0014",
-      name: "Testing",
-      token: "100",
-      spin: "100",
-      wagering: "0",
-      type: "code",
-      date: "February 22, 2022, 12:16",
-      bonusCode: "Testing2122",
-      status: "Active",
-    },
-    {
-      id: "PSB0015",
-      name: "Bonus3000",
-      token: "20",
-      spin: "0",
-      wagering: "0",
-      type: "login",
-      date: "May 1, 2022, 3:59",
-      bonusCode: "-",
-      status: "Active",
-    },
-    {
-      id: "PSB0017",
-      name: "Peter",
-      token: "500",
-      spin: "100",
-      wagering: "0",
-      type: "registration",
-      date: "December 26, 2023, 9:41",
-      bonusCode: "-",
-      status: "Inactive",
-    },
-    {
-      id: "PSB0018",
-      name: "Peter1000",
-      token: "1000",
-      spin: "1000",
-      wagering: "0",
-      type: "registration",
-      date: "December 26, 2023, 9:43",
-      bonusCode: "-",
-      status: "Active",
-    },
-    {
-      id: "PSB0019",
-      name: "Peter10002",
-      token: "1000",
-      spin: "1000",
-      wagering: "1000",
-      type: "code",
-      date: "December 26, 2023, 9:46",
-      bonusCode: "Peter10002",
-      status: "Active",
-    },
-    {
-      id: "PSB003",
-      name: "Bonus500",
-      token: "500",
-      spin: "0",
-      wagering: "0",
-      type: "code",
-      date: "March 18, 2021, 11:06",
-      bonusCode: "bonus500",
-      status: "Active",
-    },
-    {
-      id: "PSB004",
-      name: "Bonus1000",
-      token: "500",
-      spin: "0",
-      wagering: "0",
-      type: "code",
-      date: "March 19, 2021, 2:23",
-      bonusCode: "bonus1000",
-      status: "Active",
-    },
-  ];
+  useEffect(() => {
+    const fetchBonuses = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "/api/bonuses/propersix-bonuses/"
+        );
+        // Ensure we handle array or wrapped responses
+        const data = Array.isArray(response.data)
+          ? response.data
+          : response.data.results || [];
+        setBonuses(data);
+      } catch (error) {
+        console.error("Error fetching bonuses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBonuses();
+  }, []);
+
+  const filteredBonuses = bonuses.filter(
+    (bonus) =>
+      bonus.bonus_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      bonus.id?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -183,104 +129,245 @@ const BonusesCodesPage = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border bg-[#1E29394D] border-[#1E293980] text-[#99A1AF] text-[11px]   tracking-widest whitespace-nowrap">
-                  <th className="px-6 py-5">
-                    ID <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    BONUS NAME <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    FREE TOKEN <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    FREE SPIN <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    WAGERING REQ <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    TYPE <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    CREATED DATE <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5 text-[#C27AFF]">
-                    BONUS CODE <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5">
-                    STATUS <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                  <th className="px-6 py-5 text-right whitespace-nowrap">
-                    ACTION <span className="ml-1 text-[10px]">⇅</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-white">
-                {bonuses.map((bonus, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b border-[#C27AFF08] hover:bg-[#AD46FF05] transition-colors group"
-                  >
-                    <td className="px-6 py-5 text-xs text-[#DAB2FF]">
-                      {bonus.id}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#D1D5DC] ">
-                      {bonus.name}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#D1D5DC]">
-                      {bonus.token}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#D1D5DC]">
-                      {bonus.spin}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#D1D5DC]">
-                      {bonus.wagering}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#D1D5DC]">
-                      {bonus.type}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#D1D5DC]">
-                      {bonus.date}
-                    </td>
-                    <td className="px-6 py-5 text-xs text-[#C27AFF]">
-                      {bonus.bonusCode}
-                    </td>
-                    <td className="px-6 py-5">
-                      <span
-                        className={`px-3 py-2 rounded-lg text-[10px]   tracking-wider ${
-                          bonus.status === "Active"
-                            ? "bg-[#155DFC] text--white shadow-[0_0_10px_rgba(45,127,255,0.3)]"
-                            : "bg-[#E7000B] text--white shadow-[0_0_10px_rgba(255,31,31,0.3)]"
-                        }`}
-                      >
-                        {bonus.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-5 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2">
-                        <button className="w-8 h-8 rounded-lg bg-[#364153] text-[#D1D5DC] flex items-center justify-center hover:bg-[#36415360] transition-all cursor-pointer">
-                          <MdBlock size={18} />
-                        </button>
-                        <button className="w-8 h-8 rounded-lg bg-[#E7000B] text-white flex items-center justify-center hover:bg-[#FF1F1FEE] transition-all cursor-pointer shadow-[0_0_10px_rgba(255,31,31,0.4)]">
-                          <FiTrash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
+          <div className="overflow-x-auto min-h-[300px]">
+            {loading ? (
+              <div className="flex items-center justify-center h-48 text-white">
+                Loading Bonuses...
+              </div>
+            ) : (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border bg-[#1E29394D] border-[#1E293980] text-[#99A1AF] text-[11px]   tracking-widest whitespace-nowrap">
+                    <th className="px-6 py-5">
+                      ID <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      NAME <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      DEPOSIT METHOD <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      MIN LOSS <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5 text-[#C27AFF]">
+                      BONUS CODE <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      TYPE <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      BONUS AMT <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      FREE SPIN <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      GAME <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      BET SIZE <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      LINES <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      WAGERING <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      VALID FROM <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      VALID TILL <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      DAY <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      RECURRING <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      W2 <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      EX COUNTRY <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      AFF SOURCE <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      STATUS <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      PERCENT AMT <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      MAX AMT <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      CHAINED <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      EX CHAIN <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      USERS <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      VIP LEVEL <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      CREATED AT <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5">
+                      UPDATED AT <span className="ml-1 text-xs">⇅</span>
+                    </th>
+                    <th className="px-6 py-5 text-right whitespace-nowrap">
+                      ACTION <span className="ml-1 text-xs">⇅</span>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="text-white">
+                  {filteredBonuses.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={28}
+                        className="text-center py-10 text-white/50"
+                      >
+                        No bonuses found
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredBonuses.map((bonus, idx) => (
+                      <tr
+                        key={idx}
+                        className="border-b border-[#C27AFF08] hover:bg-[#AD46FF05] transition-colors group"
+                      >
+                        <td className="px-6 py-5 text-xs text-[#DAB2FF]">
+                          {bonus.id}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC] ">
+                          {bonus.bonus_name}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.deposit_method || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.min_loss || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#C27AFF]">
+                          {bonus.bonus_code || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.type}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.bonus_amount}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.free_spin}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.game || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.bet_size}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.lines}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.wagering_req}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.from_field
+                            ? new Date(bonus.from_field).toLocaleDateString()
+                            : "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.till
+                            ? new Date(bonus.till).toLocaleDateString()
+                            : "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.specific_day || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.recurring || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.w_2 || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.ex_country || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.aff_source || "-"}
+                        </td>
+                        <td className="px-6 py-5">
+                          <span
+                            className={`px-3 py-2 rounded-lg text-xs   tracking-wider ${
+                              bonus.status
+                                ? "bg-[#155DFC] text--white shadow-[0_0_10px_rgba(45,127,255,0.3)]"
+                                : "bg-[#E7000B] text--white shadow-[0_0_10px_rgba(255,31,31,0.3)]"
+                            }`}
+                          >
+                            {bonus.status ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.percent_amount || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.max_amount || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.chained || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.ex_chain || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.users || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.vip_level || "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.created_at
+                            ? new Date(bonus.created_at).toLocaleDateString()
+                            : "-"}
+                        </td>
+                        <td className="px-6 py-5 text-xs text-[#D1D5DC]">
+                          {bonus.updated_at
+                            ? new Date(bonus.updated_at).toLocaleDateString()
+                            : "-"}
+                        </td>
+
+                        <td className="px-6 py-5 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-2">
+                            <button className="w-8 h-8 rounded-lg bg-[#E7000B] text-white flex items-center justify-center hover:bg-[#FF1F1FEE] transition-all cursor-pointer shadow-[0_0_10px_rgba(255,31,31,0.4)]">
+                              <FiTrash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            )}
 
             {/* Pagination / Info Row */}
             <div className="p-8 flex flex-col md:flex-row items-center justify-between border-t border-[#C27AFF1A] gap-4">
               <p className="text-[#98A2B3] text-sm">
-                Showing <span className="text-white ">1</span> to{" "}
-                <span className="text-white ">10</span> of{" "}
-                <span className="text-white ">13</span> entries
+                Showing{" "}
+                <span className="text-white ">
+                  {filteredBonuses.length > 0 ? 1 : 0}
+                </span>{" "}
+                to <span className="text-white ">{filteredBonuses.length}</span>{" "}
+                of <span className="text-white ">{filteredBonuses.length}</span>{" "}
+                entries
               </p>
               <div className="flex items-center gap-2">
                 <button className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer disabled:opacity-50">

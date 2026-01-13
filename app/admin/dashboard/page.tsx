@@ -103,9 +103,9 @@ const MonthlyTrendsChart = () => {
         let rawData = response.data;
         if (rawData && typeof rawData === "object" && !Array.isArray(rawData)) {
           rawData =
-            rawData.results ||
-            rawData.data ||
-            rawData.Stats ||
+            rawData.labels ||
+            rawData.deposits ||
+            rawData.withdraws ||
             rawData.stats ||
             [];
         }
@@ -317,7 +317,7 @@ export default function AdminDashboard() {
       {
         ...STATS[0],
         value: formatValue(
-          statsData.total_deposited_amount || statsData.deposited_amount
+          statsData.total_deposits || statsData.deposited_amount
         ),
         trend: statsData.deposited_trend || STATS[0].trend,
       },
@@ -334,35 +334,35 @@ export default function AdminDashboard() {
       {
         ...STATS[3],
         value: formatValue(
-          statsData.total_sessions || statsData.sessions_count
+          statsData.total_games_sessions || statsData.sessions_count
         ),
         trend: statsData.sessions_trend || STATS[3].trend,
       },
       {
         ...STATS[4],
         value: formatValue(
-          statsData.deposit_requests || statsData.deposits_pending
+          statsData.total_deposit_requests || statsData.deposits_pending
         ),
         trend: statsData.deposit_requests_trend || STATS[4].trend,
       },
       {
         ...STATS[5],
         value: formatValue(
-          statsData.withdrawal_requests || statsData.withdraws_pending
+          statsData.total_withdraw_requests || statsData.withdraws_pending
         ),
         trend: statsData.withdrawal_requests_trend || STATS[5].trend,
       },
       {
         ...STATS[6],
         value: formatValue(
-          statsData.withdrawal_amount || statsData.total_withdrawn
+          statsData.total_withdraws || statsData.total_withdrawn
         ),
         trend: statsData.withdrawal_amount_trend || STATS[6].trend,
       },
       {
         ...STATS[7],
         value: formatValue(
-          statsData.total_investment || statsData.investment_amount
+          statsData.total_invest || statsData.investment_amount
         ),
         trend: statsData.investment_trend || STATS[7].trend,
       },

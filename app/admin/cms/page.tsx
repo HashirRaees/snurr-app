@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "../../../components/admin/Navbar";
 import {
   IoMdImage,
@@ -9,79 +9,283 @@ import {
   IoMdText,
   IoMdCode,
 } from "react-icons/io";
-import { PiFloppyDisk } from "react-icons/pi";
+import { PiFloppyDisk, PiTrash } from "react-icons/pi";
 import { RiLinksLine } from "react-icons/ri";
 import { RxText } from "react-icons/rx";
 import { FiUpload, FiCreditCard } from "react-icons/fi";
 import { GoImage } from "react-icons/go";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";
+import axiosInstance from "@/lib/axios";
 
-const CMSSettings = () => {
-  const [maintenanceMode, setMaintenanceMode] = useState(false);
+// --- Types ---
+interface CMSData {
+  [key: string]: any;
+}
 
-  const SectionHeading = ({
-    icon: Icon,
-    title,
-  }: {
-    icon: React.ElementType;
-    title: string;
-  }) => (
-    <div className="flex items-center py-2 border-b border-[#C27AFF21] gap-3 mb-6">
-      <Icon className="text-[#C27AFF] text-2xl" />
-      <h3 className="text-white font-sans text-xl">{title}</h3>
-    </div>
-  );
+// --- Helper Components ---
 
-  const InputField = ({
-    label,
-    placeholder,
-    value,
-    helperText,
-  }: {
-    label?: string;
-    placeholder?: string;
-    value?: string;
-    helperText?: string;
-  }) => (
-    <div className="flex flex-col gap-2 w-full">
-      {label && <label className="text-[#D1D5DC] text-sm ">{label}</label>}
-      <input
-        type="text"
-        placeholder={placeholder}
-        defaultValue={value}
-        className="bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none transition-all"
-      />
-      {helperText && (
-        <p className="text-[#99A1AF] text-xs mt-1">{helperText}</p>
-      )}
-    </div>
-  );
+const SectionHeading = ({
+  icon: Icon,
+  title,
+}: {
+  icon: React.ElementType;
+  title: string;
+}) => (
+  <div className="flex items-center py-2 border-b border-[#C27AFF21] gap-3 mb-6">
+    <Icon className="text-[#C27AFF] text-2xl" />
+    <h3 className="text-white font-sans text-xl">{title}</h3>
+  </div>
+);
 
-  const ImageUploader = ({
-    label,
-    helperText,
-  }: {
-    label?: string;
-    helperText?: string;
-  }) => (
+const InputField = ({
+  label,
+  placeholder,
+  value,
+  helperText,
+  onChange,
+}: {
+  label?: string;
+  placeholder?: string;
+  value?: string | number | null;
+  helperText?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <div className="flex flex-col gap-2 w-full">
+    {label && <label className="text-[#D1D5DC] text-sm ">{label}</label>}
+    <input
+      type="text"
+      placeholder={placeholder}
+      value={value ?? ""}
+      onChange={onChange}
+      className="bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none transition-all"
+    />
+    {helperText && <p className="text-[#99A1AF] text-xs mt-1">{helperText}</p>}
+  </div>
+);
+
+const ImageUploader = ({
+  label,
+  helperText,
+  imageUrl,
+  fieldName,
+  onFileSelect,
+  onRemove,
+}: {
+  label?: string;
+  helperText?: string;
+  imageUrl?: string | null;
+  fieldName: string;
+  onFileSelect: (field: string, file: File) => void;
+  onRemove: (field: string) => void;
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      onFileSelect(fieldName, e.target.files[0]);
+    }
+  };
+
+  return (
     <div className="flex flex-col gap-3 w-full max-w-[400px]">
       {label && <label className="text-[#D1D5DC] text-sm ">{label}</label>}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 bg-[#C27AFF21] border border-[#C27AFF] px-6 py-2.5 rounded-xl cursor-pointer hover:bg-[#C27AFF33] transition-all">
+        <div
+          onClick={handleClick}
+          className="flex items-center gap-2 bg-[#C27AFF21] border border-[#C27AFF] px-6 py-2.5 rounded-xl cursor-pointer hover:bg-[#C27AFF33] transition-all"
+        >
           <FiUpload className="text-[#D1D5DC]" size={18} />
           <span className="text-[#D1D5DC] text-sm font-medium">
             Choose File
           </span>
         </div>
-        <span className="text-[#6A7282] text-sm">No file chosen</span>
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          accept="image/png, image/jpeg, image/jpg"
+          onChange={handleFile}
+        />
+        <span className="text-[#6A7282] text-sm">
+          {imageUrl ? "File selected" : "No file chosen"}
+        </span>
+        {imageUrl && (
+          <button
+            onClick={() => onRemove(fieldName)}
+            className="p-2 cursor-pointer bg-red-500/10 border border-red-500/50 rounded-lg hover:bg-red-500/20 transition-all text-red-500"
+            title="Remove Image"
+          >
+            <PiTrash size={18} />
+          </button>
+        )}
       </div>
       {helperText && <p className="text-[#6A7282] text-sm">{helperText}</p>}
-      <div className="w-[180px] h-[180px] bg-[#C27AFF0D] border border-[#C27AFF] rounded-2xl flex items-center justify-center mt-1">
-        <GoImage className="text-[#4A5565] text-5xl opacity-40" />
+      <div className="w-[180px] h-[180px] bg-[#C27AFF0D] border border-[#C27AFF] rounded-2xl flex items-center justify-center mt-1 overflow-hidden relative">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="Preview"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <GoImage className="text-[#4A5565] text-5xl opacity-40" />
+        )}
       </div>
     </div>
   );
+};
+
+// --- Main Component ---
+
+const CMSSettings = () => {
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [cmsData, setCmsData] = useState<CMSData>({});
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File }>(
+    {}
+  );
+
+  useEffect(() => {
+    const fetchCMSData = async () => {
+      try {
+        const response = await axiosInstance.get("/api/settings/cms/");
+        if (response.data) {
+          const data = Array.isArray(response.data)
+            ? response.data[0]
+            : response.data;
+          setCmsData(data);
+
+          if (data.stripe_form === true || data.stripe_form === "true") {
+            setMaintenanceMode(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching CMS settings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCMSData();
+  }, []);
+
+  const handleInputChange = (key: string, value: string) => {
+    setCmsData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFileChange = (field: string, file: File) => {
+    const previewUrl = URL.createObjectURL(file);
+    setCmsData((prev) => ({ ...prev, [field]: previewUrl }));
+    setSelectedFiles((prev) => ({ ...prev, [field]: file }));
+  };
+
+  const handleRemoveImage = async (field: string) => {
+    try {
+      if (selectedFiles[field]) {
+        const newFiles = { ...selectedFiles };
+        delete newFiles[field];
+        setSelectedFiles(newFiles);
+        setCmsData((prev) => ({ ...prev, [field]: null }));
+        return;
+      }
+
+      const response = await axiosInstance.post(
+        "/api/settings/cms/remove-image/",
+        {
+          field_name: field,
+        }
+      );
+      if (response.status === 200 || response.status === 204) {
+        setCmsData((prev) => ({ ...prev, [field]: null }));
+      }
+    } catch (error) {
+      console.error("Error removing image:", error);
+      alert("Failed to remove image. Please try again.");
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const formData = new FormData();
+
+      // Fields to exclude from the payload
+      const excludedFields = ["id", "created_at", "updated_at"];
+
+      Object.keys(cmsData).forEach((key) => {
+        if (excludedFields.includes(key)) return;
+
+        // If it's a new file, append the file
+        if (selectedFiles[key]) {
+          formData.append(key, selectedFiles[key]);
+        } else {
+          const value = cmsData[key];
+          // Skip null/undefined
+          if (value === null || value === undefined) return;
+
+          // Check if value is an existing image URL (string starting with http/https or /)
+          // AND it looks like an image field based on its name.
+          // We generally don't want to send back the URL as the new value for a FileField.
+
+          // Improved Regex to catch: _img, _img1, _icon, _icon1, _bg, logo, _image
+          const isImageField = /(_img\d*|_icon\d*|_bg|logo|image)/i.test(key);
+
+          if (
+            isImageField &&
+            typeof value === "string" &&
+            (value.startsWith("http") || value.startsWith("/"))
+          ) {
+            // Skip existing image URLs (both absolute and relative)
+            return;
+          }
+
+          // Specifically handle boolean values as strings "true"/"false" if backend expects it
+          formData.append(key, String(value));
+        }
+      });
+
+      // Ensure stripe_form matches maintenanceMode state visually if user toggled it
+      if (formData.has("stripe_form")) {
+        formData.set("stripe_form", String(maintenanceMode));
+      } else {
+        formData.append("stripe_form", String(maintenanceMode));
+      }
+
+      await axiosInstance.post("/api/settings/cms/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Settings saved successfully!");
+      // Optionally re-fetch or clear selectedFiles
+      setSelectedFiles({});
+    } catch (error: any) {
+      console.error("Error saving settings:", error);
+      const msg =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        JSON.stringify(error.response?.data) ||
+        "Failed to save settings.";
+      alert(msg);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#22003B] flex items-center justify-center">
+        <div className="text-white">Loading Settings...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -107,18 +311,27 @@ const CMSSettings = () => {
               Manage your website content and settings
             </p>
           </div>
-          <button className="px-6 py-2.5 flex gap-2 rounded-lg shadow-[0_10px_15px_-3px_#AD46FF4D] bg-[#9810FA] text-white text-sm cursor-pointer whitespace-nowrap">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-6 py-2.5 flex gap-2 rounded-lg shadow-[0_10px_15px_-3px_#AD46FF4D] bg-[#9810FA] text-white text-sm cursor-pointer whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <PiFloppyDisk className="text-lg" />
-            Save Changes
+            {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
 
-        {/* Main Content Container */}
+        {/* --- Sections --- */}
+
+        {/* Site Title */}
         <div className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10">
-          {/* Site Title */}
           <section>
             <SectionHeading icon={RxText} title="Site Title" />
-            <InputField label="Site Name" value="Online Casino | Propersix" />
+            <InputField
+              label="Site Name"
+              value={cmsData.site_title}
+              onChange={(e) => handleInputChange("site_title", e.target.value)}
+            />
           </section>
         </div>
 
@@ -130,10 +343,18 @@ const CMSSettings = () => {
               <ImageUploader
                 label="Site Icon"
                 helperText="upload an icon of PNG/JPEG"
+                imageUrl={cmsData.site_icon}
+                fieldName="site_icon"
+                onFileSelect={handleFileChange}
+                onRemove={handleRemoveImage}
               />
               <ImageUploader
                 label="Logo"
                 helperText="upload a logo of PNG/JPEG"
+                imageUrl={cmsData.logo}
+                fieldName="logo"
+                onFileSelect={handleFileChange}
+                onRemove={handleRemoveImage}
               />
             </div>
           </section>
@@ -144,13 +365,26 @@ const CMSSettings = () => {
           <section>
             <SectionHeading icon={IoMenu} title="Header Menu Bar" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField label="Menu Text 1" />
-              <InputField label="Menu Text 2" />
-              <InputField label="Menu Text 3" />
-              <InputField label="Menu Text 4" />
-              <InputField label="Menu Text 5" />
-              <InputField label="Menu Button Text 1" />
-              <InputField label="Menu Button Text 2" />
+              {[1, 2, 3, 4, 5].map((num) => (
+                <InputField
+                  key={`menu_text${num}`}
+                  label={`Menu Text ${num}`}
+                  value={cmsData[`menu_text${num}`]}
+                  onChange={(e) =>
+                    handleInputChange(`menu_text${num}`, e.target.value)
+                  }
+                />
+              ))}
+              {[1, 2].map((num) => (
+                <InputField
+                  key={`menu_btn${num}`}
+                  label={`Menu Button Text ${num}`}
+                  value={cmsData[`menu_btn${num}`]}
+                  onChange={(e) =>
+                    handleInputChange(`menu_btn${num}`, e.target.value)
+                  }
+                />
+              ))}
             </div>
           </section>
         </div>
@@ -163,11 +397,34 @@ const CMSSettings = () => {
               <ImageUploader
                 label="Banner Slide Image"
                 helperText="upload a slide image of JPG/JPEG"
+                imageUrl={cmsData.banner_side_img}
+                fieldName="banner_side_img"
+                onFileSelect={handleFileChange}
+                onRemove={handleRemoveImage}
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <ImageUploader
                   label="Banner Background Image"
                   helperText="upload a background image of JPG/JPEG"
+                  imageUrl={cmsData.banner_bg_img}
+                  fieldName="banner_bg_img"
+                  onFileSelect={handleFileChange}
+                  onRemove={handleRemoveImage}
+                />
+                {/* Potentially other banner inputs */}
+                <InputField
+                  label="Banner Heading"
+                  value={cmsData.banner_heading}
+                  onChange={(e) =>
+                    handleInputChange("banner_heading", e.target.value)
+                  }
+                />
+                <InputField
+                  label="Banner Text"
+                  value={cmsData.banner_text}
+                  onChange={(e) =>
+                    handleInputChange("banner_text", e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -182,55 +439,67 @@ const CMSSettings = () => {
               title="Winner Section Heading/Text"
             />
             <div className="space-y-6">
-              <InputField label="Winner Section Heading" />
-              <InputField label="Winner Table Cell1 Heading" />
-              <InputField label="Winner Table Cell2 Heading" />
-              <InputField label="Winner Table Cell3 Heading" />
+              <InputField
+                label="Winner Section Heading"
+                value={cmsData.winner_heading}
+                onChange={(e) =>
+                  handleInputChange("winner_heading", e.target.value)
+                }
+              />
+              {[1, 2, 3].map((num) => (
+                <InputField
+                  key={`winner_theading${num}`}
+                  label={`Winner Table Cell${num} Heading`}
+                  value={cmsData[`winner_theading${num}`]}
+                  onChange={(e) =>
+                    handleInputChange(`winner_theading${num}`, e.target.value)
+                  }
+                />
+              ))}
             </div>
           </section>
         </div>
 
         {/* Table Rows Sections */}
-        <div className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10">
-          <div>
-            <SectionHeading icon={IoMdStats} title="Table 1st Row Data" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <InputField label="Row (1) data (1)" value="Peter Depth" />
-              <InputField label="Row (1) data (2)" value="28:11" />
-              <InputField label="Row (1) data (3)" value="3250 PlayFie" />
+        {[1, 2, 3, 4].map((rowNum) => (
+          <div
+            key={`row-${rowNum}`}
+            className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10"
+          >
+            <div>
+              <SectionHeading
+                icon={IoMdStats}
+                title={`Table ${
+                  rowNum === 1
+                    ? "1st"
+                    : rowNum === 2
+                    ? "2nd"
+                    : rowNum === 3
+                    ? "3rd"
+                    : "4th"
+                } Row Data`}
+              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((colNum) => {
+                  const dataIndex = (rowNum - 1) * 3 + colNum;
+                  return (
+                    <InputField
+                      key={`winner_tdata${dataIndex}`}
+                      label={`Row (${rowNum}) data (${colNum})`}
+                      value={cmsData[`winner_tdata${dataIndex}`]}
+                      onChange={(e) =>
+                        handleInputChange(
+                          `winner_tdata${dataIndex}`,
+                          e.target.value
+                        )
+                      }
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10">
-          <div>
-            <SectionHeading icon={IoMdStats} title="Table 2nd Row Data" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <InputField label="Row (2) data (1)" value="TrottingTimu" />
-              <InputField label="Row (2) data (2)" value="13:28" />
-              <InputField label="Row (2) data (3)" value="1724 PlayFie" />
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10">
-          <div>
-            <SectionHeading icon={IoMdStats} title="Table 3rd Row Data" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <InputField label="Row (3) data (1)" value="ClownFinale" />
-              <InputField label="Row (3) data (2)" value="16:51" />
-              <InputField label="Row (3) data (3)" value="1186 PlayFie" />
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10">
-          <div>
-            <SectionHeading icon={IoMdStats} title="Table 4th Row Data" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <InputField label="Row (4) data (1)" value="TrottingTimu" />
-              <InputField label="Row (4) data (2)" value="13:51" />
-              <InputField label="Row (4) data (3)" value="921 PlayFie" />
-            </div>
-          </div>
-        </div>
+        ))}
 
         {/* Promotion Top Section */}
         <div className="bg-[#10182800] border border-[#C27AFF21] rounded-[32px] p-8 md:p-12 space-y-16 mb-10">
@@ -239,6 +508,10 @@ const CMSSettings = () => {
             <ImageUploader
               label="Promotion Top-Background Image"
               helperText="upload a background image of JPG/JPEG"
+              imageUrl={cmsData.promotion_bg}
+              fieldName="promotion_bg"
+              onFileSelect={handleFileChange}
+              onRemove={handleRemoveImage}
             />
           </section>
         </div>
@@ -252,28 +525,55 @@ const CMSSettings = () => {
                 <label className="text-[#D1D5DC] text-sm ">
                   Client Promo Statement
                 </label>
-                <textarea className="bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white focus:outline-none min-h-[120px]" />
+                <textarea
+                  className="bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white focus:outline-none min-h-[120px]"
+                  value={cmsData.client_promo_statement || ""}
+                  onChange={(e) =>
+                    handleInputChange("client_promo_statement", e.target.value)
+                  }
+                />
                 <p className="text-[#99A1AF] text-xs">
                   embed paragraph inside p and header inside h - tags
                 </p>
               </div>
               <InputField
                 label="Header For Subscribe Section"
-                value="footer_newsletter_h1"
+                value={cmsData.subscribe_header}
+                onChange={(e) =>
+                  handleInputChange("subscribe_header", e.target.value)
+                }
               />
               <p className="text-[#99A1AF] -mt-4 text-xs">
                 embed paragraph inside p and header inside h - tags
               </p>
 
-              <InputField label="Input Field Place Holder" />
+              <InputField
+                label="Input Field Place Holder"
+                value={cmsData.subscribe_input_text}
+                onChange={(e) =>
+                  handleInputChange("subscribe_input_text", e.target.value)
+                }
+              />
               <p className="text-[#99A1AF] -mt-4 text-xs">
                 embed paragraph inside p and header inside h - tags
               </p>
-              <InputField label="Subscribe Button Text" />
+              <InputField
+                label="Subscribe Button Text"
+                value={cmsData.subscribe_btn}
+                onChange={(e) =>
+                  handleInputChange("subscribe_btn", e.target.value)
+                }
+              />
               <p className="text-[#99A1AF] -mt-4 text-xs">
                 embed paragraph inside p and header inside h - tags
               </p>
-              <InputField label="Copy Right Statement" />
+              <InputField
+                label="Copy Right Statement"
+                value={cmsData.copy_right_statement}
+                onChange={(e) =>
+                  handleInputChange("copy_right_statement", e.target.value)
+                }
+              />
               <p className="text-[#99A1AF] -mt-4 text-xs">
                 embed paragraph inside p and header inside h - tags
               </p>
@@ -286,42 +586,20 @@ const CMSSettings = () => {
           <section>
             <SectionHeading icon={RiLinksLine} title="Footer Links" />
             <div className="space-y-6">
-              <InputField
-                label="Footer link 1"
-                value={
-                  '<a href="https://www.propersix.casino/privacy-policy">Privacy Policy</a>'
-                }
-                helperText="use html a tag to define link"
-              />
-              <InputField
-                label="Footer link 2"
-                value={
-                  '<a href="https://www.propersix.casino/cookies">Cookies</a>'
-                }
-                helperText="use html a tag to define link"
-              />
-              <InputField
-                label="Footer link 3"
-                value={
-                  '<a href="https://www.propersix.casino/terms-and-services">Terms and Services</a>'
-                }
-                helperText="use html a tag to define link"
-              />
-              <InputField
-                label="Footer link 4"
-                value={
-                  '<a href="https://www.propersix.casino/support">Support</a>'
-                }
-                helperText="use html a tag to define link"
-              />
-              <InputField
-                label="Footer link 5"
-                helperText="use html a tag to define link"
-              />
-              <InputField
-                label="Footer link 6"
-                helperText="use html a tag to define link"
-              />
+              {[1, 2, 3, 4, 5, 6].map((num) => (
+                <InputField
+                  key={`footer_link${num === 1 ? "" : num}`}
+                  label={`Footer link ${num}`}
+                  value={cmsData[`footer_link${num === 1 ? "" : num}`]}
+                  helperText="use html a tag to define link"
+                  onChange={(e) =>
+                    handleInputChange(
+                      `footer_link${num === 1 ? "" : num}`,
+                      e.target.value
+                    )
+                  }
+                />
+              ))}
             </div>
           </section>
         </div>
@@ -333,8 +611,11 @@ const CMSSettings = () => {
             <div className="flex flex-col gap-2">
               <InputField
                 helperText="just enter script link"
-                value="ca_http://code.jivosite.com/widget.js"
+                value={cmsData.chat_script}
                 label="Chat Script"
+                onChange={(e) =>
+                  handleInputChange("chat_script", e.target.value)
+                }
               />
             </div>
           </section>
@@ -350,8 +631,11 @@ const CMSSettings = () => {
             <div className="space-y-6">
               <InputField
                 label="SendGrid API Key"
-                value="SG.ywqs1vExVrDhaDpgxX.vr1sanKlHtIBDUblsk9FdBxl-J_fPgs65CcJn74"
+                value={cmsData.sendgrid_secret}
                 helperText="just enter script link"
+                onChange={(e) =>
+                  handleInputChange("sendgrid_secret", e.target.value)
+                }
               />
             </div>
           </section>
@@ -371,7 +655,10 @@ const CMSSettings = () => {
                 </p>
               </div>
               <button
-                onClick={() => setMaintenanceMode(!maintenanceMode)}
+                onClick={() => {
+                  setMaintenanceMode(!maintenanceMode);
+                  handleInputChange("stripe_form", String(!maintenanceMode));
+                }}
                 className={`w-14 h-7 rounded-full transition-all relative flex items-center px-1 cursor-pointer ${
                   maintenanceMode ? "bg-[#101828]" : "bg-[#C27AFF]"
                 }`}
@@ -387,9 +674,13 @@ const CMSSettings = () => {
         </div>
         {/* Final Button */}
         <div className="flex justify-end pt-10">
-          <button className="px-6 py-2.5 rounded-lg shadow-[0_10px_15px_-3px_#AD46FF4D] flex items-center gap-2 bg-[#9810FA] text-white text-sm cursor-pointer whitespace-nowrap">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-6 py-2.5 rounded-lg shadow-[0_10px_15px_-3px_#AD46FF4D] flex items-center gap-2 bg-[#9810FA] text-white text-sm cursor-pointer whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <PiFloppyDisk className="text-lg" />
-            Update Changes
+            {saving ? "Saving..." : "Update Changes"}
           </button>
         </div>
       </main>
