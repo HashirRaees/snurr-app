@@ -96,10 +96,42 @@ const AddMediaTemplate = () => {
 
       <main className="mx-auto px-5 md:px-20 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm mb-6 px-1">
-          <span className="text-[#C27AFF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
-            Affiliate
-          </span>
+        <div className="flex items-center gap-2 text-sm mb-6 px-1 flex-wrap">
+          <Link href="/admin/affiliate">
+            <span className="text-[#C27AFF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Affiliate
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/req-list">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Requests
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/users">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Users
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/withdraws">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Withdrawals
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/bonuses">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Bonuses
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/pro-transactions">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Pro Transactions
+            </span>
+          </Link>
           <span className="text-white/20">/</span>
           <Link href="/admin/affiliate/media-list">
             <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
@@ -107,7 +139,37 @@ const AddMediaTemplate = () => {
             </span>
           </Link>
           <span className="text-white/20">/</span>
-          <span className="text-[#99A1AF] font-medium">Add New</span>
+          <span className="text-[#C27AFF] font-medium">Add New</span>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/list-affiliates">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              List Affiliates
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/settings">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Settings
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/api-history">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              API History
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/api-settings">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              API Settings
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/visitor-history">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Visitor History
+            </span>
+          </Link>
         </div>
 
         {/* Header Section */}

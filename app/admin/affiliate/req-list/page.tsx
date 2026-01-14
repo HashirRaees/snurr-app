@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "@/components/admin/Navbar";
 import axiosInstance from "@/lib/axios";
-import { IoMdSearch, IoMdEye, IoMdTrash } from "react-icons/io";
+import { IoMdSearch, IoMdEye, IoMdTrash, IoMdClose } from "react-icons/io";
 import {
   FiFilter,
   FiCheckCircle,
@@ -21,28 +21,147 @@ const AffiliateRequests = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAffiliate, setSelectedAffiliate] = useState<any>(null);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [approveForm, setApproveForm] = useState({
+    pro_parent: "",
+    affiliate_percentage: "",
+  });
+  const [rejectForm, setRejectForm] = useState({
+    comments: "",
+  });
+  const [processing, setProcessing] = useState(false);
+
+  const fetchRequests = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        "/api/affiliates/affiliate-users/requests/"
+      );
+      let rawData = response.data;
+      if (rawData && typeof rawData === "object" && !Array.isArray(rawData)) {
+        rawData = rawData.results || rawData.data || rawData.requests || [];
+      }
+      setData(Array.isArray(rawData) ? rawData : []);
+    } catch (err: any) {
+      console.error("Failed to fetch affiliate requests:", err);
+      setError("Failed to load requests from the server.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosInstance.get(
-          "/api/affiliates/affiliate-users/requests/"
-        );
-        let rawData = response.data;
-        if (rawData && typeof rawData === "object" && !Array.isArray(rawData)) {
-          rawData = rawData.results || rawData.data || rawData.requests || [];
-        }
-        setData(Array.isArray(rawData) ? rawData : []);
-      } catch (err: any) {
-        console.error("Failed to fetch affiliate requests:", err);
-        setError("Failed to load requests from the server.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchRequests();
   }, []);
+
+  const handleShowAffiliate = async (id: number) => {
+    try {
+      setLoadingDetail(true);
+      setShowModal(true);
+      const response = await axiosInstance.get(
+        `/api/affiliates/affiliate-users/${id}/show/`
+      );
+      setSelectedAffiliate(response.data);
+    } catch (err: any) {
+      console.error("Failed to fetch affiliate details:", err);
+      alert("Failed to load affiliate details.");
+    } finally {
+      setLoadingDetail(false);
+    }
+  };
+
+  const handleApproveClick = (affiliate: any) => {
+    setSelectedAffiliate(affiliate);
+    setShowApproveModal(true);
+    setApproveForm({
+      pro_parent: "",
+      affiliate_percentage: "",
+    });
+  };
+
+  const handleRejectClick = (affiliate: any) => {
+    setSelectedAffiliate(affiliate);
+    setShowRejectModal(true);
+    setRejectForm({ comments: "" });
+  };
+
+  const handleApprove = async () => {
+    if (!selectedAffiliate) return;
+
+    if (!approveForm.pro_parent || !approveForm.affiliate_percentage) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      setProcessing(true);
+      const response = await axiosInstance.post(
+        "/api/affiliates/affiliate-users/approve/",
+        {
+          requestID: selectedAffiliate.id,
+          pro_parent: approveForm.pro_parent,
+          affiliate_percentage: approveForm.affiliate_percentage,
+          page: "show",
+        }
+      );
+
+      alert("Affiliate approved successfully!");
+      setShowApproveModal(false);
+      setSelectedAffiliate(null);
+      fetchRequests(); // Refresh the list
+    } catch (err: any) {
+      console.error("Failed to approve affiliate:", err);
+      const msg =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        "Failed to approve affiliate.";
+      alert(msg);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!selectedAffiliate) return;
+
+    if (!rejectForm.comments.trim()) {
+      alert("Please provide a rejection reason.");
+      return;
+    }
+
+    try {
+      setProcessing(true);
+      const response = await axiosInstance.post(
+        "/api/affiliates/affiliate-users/reject/",
+        {
+          requestID: selectedAffiliate.id,
+          comments: rejectForm.comments,
+          page: "show",
+        }
+      );
+
+      alert(
+        response.data?.message ||
+          "Affiliate request rejected successfully!"
+      );
+      setShowRejectModal(false);
+      setSelectedAffiliate(null);
+      fetchRequests(); // Refresh the list
+    } catch (err: any) {
+      console.error("Failed to reject affiliate:", err);
+      const msg =
+        err.response?.data?.detail ||
+        err.response?.data?.message ||
+        "Failed to reject affiliate.";
+      alert(msg);
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   const StatusCard = ({
     icon: Icon,
@@ -127,27 +246,39 @@ const AffiliateRequests = () => {
     if (!row) return false;
     const searchStr = searchTerm.toLowerCase();
     const username = String(row.username || row.user_name || "").toLowerCase();
-    const name = String(row.name || row.full_name || "").toLowerCase();
+    const firstName = String(row.first_name || "").toLowerCase();
+    const lastName = String(row.last_name || "").toLowerCase();
+    const fullName = `${firstName} ${lastName}`.trim().toLowerCase();
+    const name = String(row.name || fullName || "").toLowerCase();
     const email = String(row.email || "").toLowerCase();
     return (
       username.includes(searchStr) ||
       name.includes(searchStr) ||
+      firstName.includes(searchStr) ||
+      lastName.includes(searchStr) ||
       email.includes(searchStr)
     );
   });
 
   // Calculate stats from real data with robustness
+  // Status mapping: 0 = pending, 1 = approved, 2 = rejected
   const approvedCount = (data || []).filter((r) => {
+    const status = r?.status;
+    if (status === 1 || status === "1") return true;
     const s = String(r?.approval || r?.approval_status || "").toLowerCase();
-    return s === "approved";
+    return s === "approved" || s === "1";
   }).length;
   const pendingCount = (data || []).filter((r) => {
+    const status = r?.status;
+    if (status === 0 || status === "0" || status === null || status === undefined) return true;
     const s = String(r?.approval || r?.approval_status || "").toLowerCase();
-    return s === "pending";
+    return s === "pending" || s === "0";
   }).length;
   const rejectedCount = (data || []).filter((r) => {
+    const status = r?.status;
+    if (status === 2 || status === "2") return true;
     const s = String(r?.approval || r?.approval_status || "").toLowerCase();
-    return s === "rejected";
+    return s === "rejected" || s === "2";
   }).length;
 
   return (
@@ -156,18 +287,72 @@ const AffiliateRequests = () => {
 
       <main className="mx-auto px-5 md:px-20 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm mb-6 px-1">
-          <span className="text-[#C27AFF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
-            Affiliate
-          </span>
+        <div className="flex items-center gap-2 text-sm mb-6 px-1 flex-wrap">
+          <Link href="/admin/affiliate">
+            <span className="text-[#C27AFF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Affiliate
+            </span>
+          </Link>
           <span className="text-white/20">/</span>
-          <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
-            Requests
-          </span>
+          <span className="text-[#C27AFF] font-medium">Requests</span>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/users">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Users
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/withdraws">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Withdrawals
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/bonuses">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Bonuses
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/pro-transactions">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Pro Transactions
+            </span>
+          </Link>
           <span className="text-white/20">/</span>
           <Link href="/admin/affiliate/media-list">
             <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
               MultiMedia
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/list-affiliates">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              List Affiliates
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/settings">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Settings
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/api-history">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              API History
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/api-settings">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              API Settings
+            </span>
+          </Link>
+          <span className="text-white/20">/</span>
+          <Link href="/admin/affiliate/visitor-history">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors font-medium">
+              Visitor History
             </span>
           </Link>
         </div>
@@ -296,7 +481,10 @@ const AffiliateRequests = () => {
                         {row.username || row.user_name || "N/A"}
                       </td>
                       <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                        {row.name || row.first_name || "N/A"}
+                        {row.name ||
+                          (row.first_name && row.last_name
+                            ? `${row.first_name} ${row.last_name}`
+                            : row.first_name || "N/A")}
                       </td>
                       <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
                         {row.email || "N/A"}
@@ -311,7 +499,11 @@ const AffiliateRequests = () => {
                         <StatusBadge
                           type="approval"
                           status={
-                            row.approval || row.approval_status || "pending"
+                            row.status === 1 || row.status === "1"
+                              ? "approved"
+                              : row.status === 2 || row.status === "2"
+                              ? "rejected"
+                              : row.approval || row.approval_status || "pending"
                           }
                         />
                       </td>
@@ -326,10 +518,25 @@ const AffiliateRequests = () => {
                       </td>
                       <td className="px-8 py-5">
                         <div className="flex items-center justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                          <button className="p-2.5 bg-[#FB2C3633] text-[#FF6467] rounded-xl hover:bg-[#F0443833] transition-all cursor-pointer">
-                            <IoMdTrash size={18} />
+                          <button
+                            onClick={() => handleRejectClick(row)}
+                            className="p-2.5 bg-[#FB2C3633] text-[#FF6467] rounded-xl hover:bg-[#F0443833] transition-all cursor-pointer"
+                            title="Reject"
+                          >
+                            <FiXCircle size={18} />
                           </button>
-                          <button className="p-2.5 bg-[#2B7FFF33] text-[#51A2FF] rounded-xl hover:bg-[#AD46FF33] transition-all cursor-pointer">
+                          <button
+                            onClick={() => handleApproveClick(row)}
+                            className="p-2.5 bg-[#12B76A33] text-[#12B76A] rounded-xl hover:bg-[#12B76A4D] transition-all cursor-pointer"
+                            title="Approve"
+                          >
+                            <FiCheckCircle size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleShowAffiliate(row.id)}
+                            className="p-2.5 bg-[#2B7FFF33] text-[#51A2FF] rounded-xl hover:bg-[#AD46FF33] transition-all cursor-pointer"
+                            title="View Details"
+                          >
                             <IoMdEye size={18} />
                           </button>
                         </div>
@@ -379,6 +586,291 @@ const AffiliateRequests = () => {
           </div>
         </div>
       </main>
+
+      {/* Show Affiliate Details Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#1E293B] border border-[#C27AFF21] rounded-[32px] max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-[#1E293B] border-b border-[#C27AFF21] p-6 flex items-center justify-between">
+              <h3 className="text-white text-2xl font-bold">
+                Affiliate Details
+              </h3>
+              <button
+                onClick={() => {
+                  setShowModal(false);
+                  setSelectedAffiliate(null);
+                }}
+                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+              >
+                <IoMdClose size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              {loadingDetail ? (
+                <div className="text-white text-center py-10">Loading...</div>
+              ) : selectedAffiliate ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      First Name
+                    </label>
+                    <p className="text-white">{selectedAffiliate.first_name}</p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Last Name
+                    </label>
+                    <p className="text-white">{selectedAffiliate.last_name}</p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Username
+                    </label>
+                    <p className="text-white">{selectedAffiliate.user_name}</p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Email
+                    </label>
+                    <p className="text-white">{selectedAffiliate.email}</p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Phone
+                    </label>
+                    <p className="text-white">
+                      {selectedAffiliate.country_code} {selectedAffiliate.phone}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Date of Birth
+                    </label>
+                    <p className="text-white">{selectedAffiliate.dob}</p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Address
+                    </label>
+                    <p className="text-white">
+                      {selectedAffiliate.address || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      City
+                    </label>
+                    <p className="text-white">{selectedAffiliate.city}</p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      IP Address
+                    </label>
+                    <p className="text-white">
+                      {selectedAffiliate.ip_address || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Status
+                    </label>
+                    <StatusBadge
+                      type="user"
+                      status={selectedAffiliate.status}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[#98A2B3] text-sm mb-2 block">
+                      Created At
+                    </label>
+                    <p className="text-white">
+                      {new Date(selectedAffiliate.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                  {selectedAffiliate.comments && (
+                    <div className="md:col-span-2">
+                      <label className="text-[#98A2B3] text-sm mb-2 block">
+                        Comments
+                      </label>
+                      <p className="text-white bg-[#0F172A] p-4 rounded-xl">
+                        {selectedAffiliate.comments}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-white text-center py-10">
+                  No data available
+                </div>
+              )}
+            </div>
+            <div className="sticky bottom-0 bg-[#1E293B] border-t border-[#C27AFF21] p-6 flex items-center justify-end gap-4">
+              <button
+                onClick={() => {
+                  setShowModal(false);
+                  setSelectedAffiliate(null);
+                }}
+                className="px-6 py-2.5 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm hover:bg-[#1E293B] transition-all"
+              >
+                Close
+              </button>
+              {selectedAffiliate && (
+                <>
+                  <button
+                    onClick={() => {
+                      setShowModal(false);
+                      handleApproveClick(selectedAffiliate);
+                    }}
+                    className="px-6 py-2.5 bg-[#12B76A] rounded-xl text-white text-sm hover:bg-[#10A85C] transition-all flex items-center gap-2"
+                  >
+                    <FiCheckCircle size={18} />
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowModal(false);
+                      handleRejectClick(selectedAffiliate);
+                    }}
+                    className="px-6 py-2.5 bg-[#F04438] rounded-xl text-white text-sm hover:bg-[#D92D20] transition-all flex items-center gap-2"
+                  >
+                    <FiXCircle size={18} />
+                    Reject
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Approve Modal */}
+      {showApproveModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#1E293B] border border-[#C27AFF21] rounded-[32px] max-w-md w-full">
+            <div className="p-6 border-b border-[#C27AFF21] flex items-center justify-between">
+              <h3 className="text-white text-xl font-bold">Approve Affiliate</h3>
+              <button
+                onClick={() => {
+                  setShowApproveModal(false);
+                  setSelectedAffiliate(null);
+                }}
+                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+              >
+                <IoMdClose size={24} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="text-[#D1D5DC] text-sm mb-2 block">
+                  Affiliate Code (Pro Parent) *
+                </label>
+                <input
+                  type="text"
+                  value={approveForm.pro_parent}
+                  onChange={(e) =>
+                    setApproveForm({ ...approveForm, pro_parent: e.target.value })
+                  }
+                  placeholder="e.g., AFF001"
+                  className="w-full bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-[#D1D5DC] text-sm mb-2 block">
+                  Affiliate Percentage *
+                </label>
+                <input
+                  type="number"
+                  value={approveForm.affiliate_percentage}
+                  onChange={(e) =>
+                    setApproveForm({
+                      ...approveForm,
+                      affiliate_percentage: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., 10"
+                  min="0"
+                  max="100"
+                  className="w-full bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none"
+                />
+              </div>
+            </div>
+            <div className="p-6 border-t border-[#C27AFF21] flex items-center justify-end gap-4">
+              <button
+                onClick={() => {
+                  setShowApproveModal(false);
+                  setSelectedAffiliate(null);
+                }}
+                className="px-6 py-2.5 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm hover:bg-[#1E293B] transition-all"
+                disabled={processing}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleApprove}
+                disabled={processing}
+                className="px-6 py-2.5 bg-[#12B76A] rounded-xl text-white text-sm hover:bg-[#10A85C] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {processing ? "Processing..." : "Approve"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#1E293B] border border-[#C27AFF21] rounded-[32px] max-w-md w-full">
+            <div className="p-6 border-b border-[#C27AFF21] flex items-center justify-between">
+              <h3 className="text-white text-xl font-bold">Reject Affiliate</h3>
+              <button
+                onClick={() => {
+                  setShowRejectModal(false);
+                  setSelectedAffiliate(null);
+                }}
+                className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+              >
+                <IoMdClose size={24} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="text-[#D1D5DC] text-sm mb-2 block">
+                  Rejection Reason *
+                </label>
+                <textarea
+                  value={rejectForm.comments}
+                  onChange={(e) =>
+                    setRejectForm({ ...rejectForm, comments: e.target.value })
+                  }
+                  placeholder="Please provide a reason for rejection..."
+                  rows={4}
+                  className="w-full bg-[#C27AFF21] border border-[#C27AFF] rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none resize-none"
+                />
+              </div>
+            </div>
+            <div className="p-6 border-t border-[#C27AFF21] flex items-center justify-end gap-4">
+              <button
+                onClick={() => {
+                  setShowRejectModal(false);
+                  setSelectedAffiliate(null);
+                }}
+                className="px-6 py-2.5 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm hover:bg-[#1E293B] transition-all"
+                disabled={processing}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReject}
+                disabled={processing}
+                className="px-6 py-2.5 bg-[#F04438] rounded-xl text-white text-sm hover:bg-[#D92D20] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {processing ? "Processing..." : "Reject"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

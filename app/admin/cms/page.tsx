@@ -145,11 +145,13 @@ const ImageUploader = ({
 const CMSSettings = () => {
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [cmsData, setCmsData] = useState<CMSData>({});
+  const [originalCmsData, setOriginalCmsData] = useState<CMSData>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File }>(
     {}
   );
+  const [blobUrls, setBlobUrls] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const fetchCMSData = async () => {
@@ -160,6 +162,7 @@ const CMSSettings = () => {
             ? response.data[0]
             : response.data;
           setCmsData(data);
+          setOriginalCmsData(data); // Store original data for restoration
 
           if (data.stripe_form === true || data.stripe_form === "true") {
             setMaintenanceMode(true);
@@ -175,26 +178,67 @@ const CMSSettings = () => {
     fetchCMSData();
   }, []);
 
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(blobUrls).forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [blobUrls]);
+
+  // Helper function to get CMS ID
+  const getCmsId = (): number | null => {
+    return cmsData?.id || null;
+  };
+
   const handleInputChange = (key: string, value: string) => {
     setCmsData((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleFileChange = (field: string, file: File) => {
+    // Clean up previous blob URL if exists
+    if (blobUrls[field]) {
+      URL.revokeObjectURL(blobUrls[field]);
+    }
+    
     const previewUrl = URL.createObjectURL(file);
+    setBlobUrls((prev) => ({ ...prev, [field]: previewUrl }));
     setCmsData((prev) => ({ ...prev, [field]: previewUrl }));
     setSelectedFiles((prev) => ({ ...prev, [field]: file }));
   };
 
+  // Helper function to check if a value is a URL (existing image)
+  const isImageUrl = (value: any): boolean => {
+    if (!value || typeof value !== "string") return false;
+    return value.startsWith("http://") || value.startsWith("https://") || value.startsWith("/");
+  };
+
   const handleRemoveImage = async (field: string) => {
     try {
+      // If it's a newly selected file (not yet saved), just remove it from local state
       if (selectedFiles[field]) {
+        // Clean up blob URL
+        if (blobUrls[field]) {
+          URL.revokeObjectURL(blobUrls[field]);
+          const newBlobUrls = { ...blobUrls };
+          delete newBlobUrls[field];
+          setBlobUrls(newBlobUrls);
+        }
+        
         const newFiles = { ...selectedFiles };
         delete newFiles[field];
         setSelectedFiles(newFiles);
-        setCmsData((prev) => ({ ...prev, [field]: null }));
+        
+        // Restore the original value from the server if it exists
+        const originalValue = originalCmsData[field];
+        setCmsData((prev) => ({ ...prev, [field]: originalValue || null }));
         return;
       }
 
+      // If it's an existing image from the server, call the API to remove it
       const response = await axiosInstance.post(
         "/api/settings/cms/remove-image/",
         {
@@ -203,16 +247,29 @@ const CMSSettings = () => {
       );
       if (response.status === 200 || response.status === 204) {
         setCmsData((prev) => ({ ...prev, [field]: null }));
+        setOriginalCmsData((prev) => ({ ...prev, [field]: null }));
+        alert("Image removed successfully!");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error removing image:", error);
-      alert("Failed to remove image. Please try again.");
+      const msg =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "Failed to remove image. Please try again.";
+      alert(msg);
     }
   };
 
   const handleSave = async () => {
     try {
       setSaving(true);
+      const cmsId = getCmsId();
+      
+      if (!cmsId) {
+        alert("CMS ID not found. Please refresh the page and try again.");
+        return;
+      }
+
       const formData = new FormData();
 
       // Fields to exclude from the payload
@@ -257,15 +314,30 @@ const CMSSettings = () => {
         formData.append("stripe_form", String(maintenanceMode));
       }
 
-      await axiosInstance.post("/api/settings/cms/", formData, {
+      // Use PATCH with the CMS ID
+      await axiosInstance.patch(`/api/settings/cms/${cmsId}/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
       alert("Settings saved successfully!");
-      // Optionally re-fetch or clear selectedFiles
+      
+      // Clean up all blob URLs after successful save
+      Object.values(blobUrls).forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+      setBlobUrls({});
       setSelectedFiles({});
+      
+      // Re-fetch the updated data to get the latest image URLs
+      const response = await axiosInstance.get(`/api/settings/cms/${cmsId}/`);
+      if (response.data) {
+        setCmsData(response.data);
+        setOriginalCmsData(response.data); // Update original data
+      }
     } catch (error: any) {
       console.error("Error saving settings:", error);
       const msg =
