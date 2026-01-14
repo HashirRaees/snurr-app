@@ -55,7 +55,9 @@ const MissionListPage = () => {
               <button className="px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiCopy size={16} /> Copy
               </button>
-              <button className="px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiPrinter size={16} /> Print
               </button>
             </div>
@@ -105,13 +107,13 @@ const MissionListPage = () => {
               <tbody>
                 {/* Single Row for Empty State Content */}
                 <tr>
-                    <td
-                      colSpan={10}
-                      className="px-6 py-12 text-center text-[#99A1AF] text-sm"
-                    >
-                      No data available in table
-                    </td>
-                  </tr>
+                  <td
+                    colSpan={10}
+                    className="px-6 py-12 text-center text-[#99A1AF] text-sm"
+                  >
+                    No data available in table
+                  </td>
+                </tr>
               </tbody>
             </table>
 

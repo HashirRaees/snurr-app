@@ -129,7 +129,9 @@ const FAQCategoriesPage = () => {
                 <FiCopy size={18} />
                 Copy
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm font-medium hover:bg-[#1E293B] transition-all cursor-pointer">
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-2 px-6 py-3 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm font-medium hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiPrinter size={18} />
                 Print
               </button>
@@ -193,11 +195,10 @@ const FAQCategoriesPage = () => {
                         </td>
                         <td className="px-8 py-5 text-center">
                           <span
-                            className={`px-4 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider border ${
-                              isActive
+                            className={`px-4 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider border ${isActive
                                 ? "bg-[#00C95033] text-[#05DF72] border-[#00C9504D]"
                                 : "bg-[#F044381A] text-[#F04438] border-[#F0443833]"
-                            }`}
+                              }`}
                           >
                             {isActive ? "Active" : "Inactive"}
                           </span>

@@ -100,7 +100,9 @@ const CustomerSearchPage = () => {
               <button className="flex-1 md:flex-none px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiCopy size={16} /> Copy
               </button>
-              <button className="flex-1 md:flex-none px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
+              <button
+                onClick={() => window.print()}
+                className="flex-1 md:flex-none px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiPrinter size={16} /> Print
               </button>
             </div>
@@ -126,9 +128,8 @@ const CustomerSearchPage = () => {
                   {columns.map((col, idx) => (
                     <th
                       key={idx}
-                      className={`px-8 py-5 ${
-                        idx === columns.length - 1 ? "text-right" : ""
-                      }`}
+                      className={`px-8 py-5 ${idx === columns.length - 1 ? "text-right" : ""
+                        }`}
                     >
                       {col}
                     </th>

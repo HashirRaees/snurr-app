@@ -62,13 +62,12 @@ const MediaDetailsModal = ({
                 Status
               </span>
               <div
-                className={`mt-2 inline-flex px-3 py-1 ml-3 rounded-full text-xs font-medium border ${
-                  media.status === true ||
-                  String(media.status) === "true" ||
-                  media.status === "Active"
+                className={`mt-2 inline-flex px-3 py-1 ml-3 rounded-full text-xs font-medium border ${media.status === true ||
+                    String(media.status) === "true" ||
+                    media.status === "Active"
                     ? "bg-[#12B76A1A] text-[#12B76A] border-[#12B76A33]"
                     : "bg-[#F790091A] text-[#F79009] border-[#F7900933]"
-                }`}
+                  }`}
               >
                 {media.status === true || String(media.status) === "true"
                   ? "Active"
@@ -83,8 +82,8 @@ const MediaDetailsModal = ({
                 {media.added_at
                   ? new Date(media.added_at).toLocaleString()
                   : media.created_at
-                  ? new Date(media.created_at).toLocaleString()
-                  : "-"}
+                    ? new Date(media.created_at).toLocaleString()
+                    : "-"}
               </p>
             </div>
           </div>
@@ -198,7 +197,7 @@ const AffiliateMediaList = () => {
       setLoading(true);
       const endpoint = url || "/api/affiliates/affiliate-media/";
       const response = await axiosInstance.get(endpoint);
-      
+
       if (response.data) {
         if (response.data.results) {
           // Paginated response
@@ -253,12 +252,12 @@ const AffiliateMediaList = () => {
   };
 
   const handleEditClick = (media: MediaItem) => {
-    const statusValue = typeof media.status === "boolean" 
+    const statusValue = typeof media.status === "boolean"
       ? (media.status ? 1 : 0)
       : typeof media.status === "string"
-      ? (media.status === "1" || media.status === "true" ? 1 : 0)
-      : (media.status === 1 ? 1 : 0);
-    
+        ? (media.status === "1" || media.status === "true" ? 1 : 0)
+        : (media.status === 1 ? 1 : 0);
+
     setFormData({
       name: media.name || "",
       type: media.type || "image",
@@ -424,10 +423,10 @@ const AffiliateMediaList = () => {
 
   const handleToggleStatus = async (id: number, currentStatus: any) => {
     try {
-      const isCurrentlyActive = 
-        currentStatus === true || 
-        currentStatus === "true" || 
-        currentStatus === "1" || 
+      const isCurrentlyActive =
+        currentStatus === true ||
+        currentStatus === "true" ||
+        currentStatus === "1" ||
         currentStatus === 1;
       const newStatus = isCurrentlyActive ? 0 : 1;
       await axiosInstance.patch(`/api/affiliates/affiliate-media/${id}/`, {
@@ -441,18 +440,17 @@ const AffiliateMediaList = () => {
   };
 
   const StatusBadge = ({ status }: { status: any }) => {
-    const isActive = 
-      status === true || 
-      status === "true" || 
-      status === "1" || 
+    const isActive =
+      status === true ||
+      status === "true" ||
+      status === "1" ||
       status === 1;
     return (
       <span
-        className={`px-3 py-1 rounded-full text-xs border ${
-          isActive
+        className={`px-3 py-1 rounded-full text-xs border ${isActive
             ? "bg-[#12B76A1A] text-[#12B76A] border-[#12B76A33]"
             : "bg-[#F790091A] text-[#F79009] border-[#F7900933]"
-        }`}
+          }`}
       >
         {isActive ? "Active" : "Inactive"}
       </span>
@@ -603,8 +601,10 @@ const AffiliateMediaList = () => {
               <button className="px-5 py-2.5 bg-[#1E293966] border border-[#364153] rounded-xl text-[#98A2B3] text-sm font-medium flex items-center gap-2 hover:text-white hover:bg-[#1E2939] transition-all cursor-pointer">
                 Copy
               </button>
-              <button className="px-5 py-2.5 bg-[#1E293966] border border-[#364153] rounded-xl text-[#98A2B3] text-sm font-medium flex items-center gap-2 hover:text-white hover:bg-[#1E2939] transition-all cursor-pointer">
-                Print
+              <button
+                onClick={() => window.print()}
+                className="px-5 py-2.5 bg-[#1E293966] border border-[#364153] rounded-xl text-[#98A2B3] text-sm font-medium flex items-center gap-2 hover:text-white hover:bg-[#1E2939] transition-all cursor-pointer">
+                <FiPrinter size={16} /> Print
               </button>
             </div>
             <div className="relative w-full max-w-xs">
@@ -654,25 +654,24 @@ const AffiliateMediaList = () => {
                         <td key={col.key} className="px-8 py-5 text-sm">
                           {col.isStatus ? (
                             <span
-                              className={`px-3 py-1 rounded-full text-xs border ${
-                                row.status === true || row.status === "Active"
+                              className={`px-3 py-1 rounded-full text-xs border ${row.status === true || row.status === "Active"
                                   ? "bg-[#12B76A1A] text-[#12B76A] border-[#12B76A33]"
                                   : "bg-[#F790091A] text-[#F79009] border-[#F7900933]"
-                              }`}
+                                }`}
                             >
                               {row.status === true
                                 ? "Active"
                                 : row.status === false
-                                ? "Inactive"
-                                : row.status}
+                                  ? "Inactive"
+                                  : row.status}
                             </span>
                           ) : col.isDate ? (
                             <span>
                               {row.added_at
                                 ? new Date(row.added_at).toLocaleString()
                                 : row.created_at
-                                ? new Date(row.created_at).toLocaleString()
-                                : "-"}
+                                  ? new Date(row.created_at).toLocaleString()
+                                  : "-"}
                             </span>
                           ) : col.isAction ? (
                             <div className="flex items-center gap-2">
@@ -700,11 +699,10 @@ const AffiliateMediaList = () => {
                               </button>
                               <button
                                 onClick={() => handleToggleStatus(row.id, row.status)}
-                                className={`p-2 rounded-lg transition-all ${
-                                  row.status === true || row.status === "true" || row.status === "1" || (typeof row.status === "number" && row.status === 1)
+                                className={`p-2 rounded-lg transition-all ${row.status === true || row.status === "true" || row.status === "1" || (typeof row.status === "number" && row.status === 1)
                                     ? "bg-[#12B76A33] text-[#12B76A] hover:bg-[#12B76A4D]"
                                     : "bg-[#F7900933] text-[#F79009] hover:bg-[#F790094D]"
-                                }`}
+                                  }`}
                                 title="Toggle Status"
                               >
                                 {row.status === true || row.status === "true" || row.status === "1" || (typeof row.status === "number" && row.status === 1) ? (

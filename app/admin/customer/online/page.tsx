@@ -1,24 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../../../components/admin/Navbar";
+import { userService, User } from "../../../../lib/services/userService";
 import { IoMdSearch } from "react-icons/io";
-import { FiUsers, FiSearch } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
 import { LuUsers } from "react-icons/lu";
 
 const CustomerOnlinePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState<User[]>([]); // Assuming response.data comes as Users list or similar structure
+  // If it comes as something else, we adapt. The prompt showed 'data': [] in one key, assuming users.
+  const [loading, setLoading] = useState(true);
+
+  // The prompt said: Response{ "data": [], "tok": {...} }
+  // So likely, data contains the list of users or sessions. 
+  // I will assume data is array of objects that have user info or are user objects. 
+  // Let's assume they are User-like objects for now.
+
+  const fetchOnlineUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await userService.getOnlineCustomers();
+      // Prompt example: { "data": [], "tok": { ... } }
+      setOnlineUsers(response.data || []);
+    } catch (error) {
+      console.error("Failed to fetch online users", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async (id: number) => {
+    if (!confirm("Are you sure you want to log out this user?")) return;
+    try {
+      await userService.logoutOnlineCustomer(id);
+      // Refresh list after logout
+      fetchOnlineUsers();
+      alert("User logged out successfully");
+    } catch (error) {
+      console.error("Logout failed", error);
+      alert("Failed to logout user");
+    }
+  }
+
+  useEffect(() => {
+    fetchOnlineUsers();
+  }, []);
 
   const columns = [
     "ID",
     "USERNAME",
-    "NAME",
     "EMAIL",
-    "DOCUMENTS VERIFIED",
-    "PENDING WITHDRAW",
-    "ELIGIBLE FOR BONUSES",
-    "FAVORITE GAME",
+    "IP ADDRESS",
     "STATUS",
     "ACTION",
   ];
@@ -47,7 +82,7 @@ const CustomerOnlinePage = () => {
             </div>
             <div>
               <h2 className="text-white text-3xl tracking-tight">
-                Customer Online
+                Customer Online ({onlineUsers.length})
               </h2>
               <p className="text-[#98A2B3] text-sm mt-1">
                 View customers currently online
@@ -88,7 +123,7 @@ const CustomerOnlinePage = () => {
             </div>
           </div>
 
-          {/* Empty State Table */}
+          {/* Table */}
           <div className="overflow-x-auto min-h-[400px] flex flex-col justify-between">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -96,9 +131,8 @@ const CustomerOnlinePage = () => {
                   {columns.map((col, idx) => (
                     <th
                       key={idx}
-                      className={`px-8 py-5 ${
-                        idx === columns.length - 1 ? "text-right" : ""
-                      }`}
+                      className={`px-8 py-5 ${idx === columns.length - 1 ? "text-right" : ""
+                        }`}
                     >
                       {col}
                     </th>
@@ -106,38 +140,49 @@ const CustomerOnlinePage = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* Single Row for Empty State Content */}
-                <tr>
-                  <td colSpan={columns.length} className="py-32">
-                    <div className="flex flex-col items-center justify-center text-center opacity-40">
-                      <div className="mb-5">
-                        <FiUsers size={50} className="text-[#98A2B3]" />
-                      </div>
-                      <p className="text-[#98A2B3] text-sm font-medium">
-                        No data available in table
-                      </p>
-                    </div>
-                  </td>
-                </tr>
+                {loading && (
+                  <tr>
+                    <td colSpan={columns.length} className="px-8 py-10 text-center text-white">Loading online users...</td>
+                  </tr>
+                )}
+                {!loading && onlineUsers.length > 0 ? (
+                  onlineUsers.map((user: any) => (
+                    <tr key={user.id || Math.random()} className="border-b border-[#C27AFF08] hover:bg-[#AD46FF05] transition-colors">
+                      <td className="px-8 py-5 text-white text-sm">#{user.id}</td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">{user.username || 'N/A'}</td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">{user.email || 'N/A'}</td>
+                      <td className="px-8 py-5 text-[#98A2B3] text-sm">{user.ip_address || 'N/A'}</td>
+                      <td className="px-8 py-5 text-[#05DF72] text-sm">Online</td>
+                      <td className="px-8 py-5 text-right">
+                        <button
+                          onClick={() => user.id && handleLogout(user.id)}
+                          className="px-4 py-1.5 rounded-lg bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-all text-xs border border-red-500/50">
+                          Logout
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  !loading && (
+                    <tr>
+                      <td colSpan={columns.length} className="py-32">
+                        <div className="flex flex-col items-center justify-center text-center opacity-40">
+                          <div className="mb-5">
+                            <FiUsers size={50} className="text-[#98A2B3]" />
+                          </div>
+                          <p className="text-[#98A2B3] text-sm font-medium">
+                            No active online customers found
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
 
-            {/* Pagination / Info Row */}
-            <div className="p-8 flex flex-col md:flex-row items-center justify-between border-t border-[#C27AFF1A] gap-4">
-              <p className="text-[#98A2B3] text-sm">
-                Showing <span className="text-white font-medium">0</span> to{" "}
-                <span className="text-white font-medium">0</span> of{" "}
-                <span className="text-white font-medium">0</span> entries
-              </p>
-              <div className="flex items-center gap-2">
-                <button className="px-6 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                  Previous
-                </button>
-                <button className="px-6 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                  Next
-                </button>
-              </div>
-            </div>
+            {/* Pagination spacer if needed, or remove if not paginated */}
+            <div className="p-4"></div>
           </div>
         </div>
       </main>

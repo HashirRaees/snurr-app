@@ -1,117 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../../../components/admin/Navbar";
+import { userService, User } from "../../../../lib/services/userService";
 import { IoMdSearch } from "react-icons/io";
-import { FiUsers, FiCopy, FiPrinter } from "react-icons/fi";
+import { FiCopy, FiPrinter } from "react-icons/fi";
 import { LuUsers } from "react-icons/lu";
 
 const CustomersListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [customers, setCustomers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const customers = [
-    {
-      id: "U88001000",
-      lastLogin: "@11948",
-      username: "Javier tortegrosa rincon",
-      name: "Javier tortegrosa rincon",
-      email: "jabitartas@hotoo.es",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001811",
-      lastLogin: "MichiJay",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "micjayworld@gambrinus.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001882",
-      lastLogin: "ajes1983",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "jkd@meha.es@gmail.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001923",
-      lastLogin: "Milosara",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "Tarathacus27@gmail.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001904",
-      lastLogin: "Johnnyjay",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "jvand365@gmail.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001905",
-      lastLogin: "Michaelyordan",
-      username: "Michele Jordan",
-      name: "Michele Jordan",
-      email: "Michele_jordan@yahoo.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001966",
-      lastLogin: "Dixson234",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "dixson234@gmail.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001907",
-      lastLogin: "BenAnanson",
-      username: "Ben Danielson",
-      name: "Ben Danielson",
-      email: "bendanielsol7@gmail.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001908",
-      lastLogin: "Akhsam919",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "akhsam919@gmail.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-    {
-      id: "U88001909",
-      lastLogin: "Akhsam916",
-      username: "First Name Last Name",
-      name: "First Name Last Name",
-      email: "akhsam916@yahoo.com",
-      withdrawal: "No Pending withdrawal",
-      favoriteGame: "0",
-      status: "Inactive",
-    },
-  ];
+  const fetchCustomers = async (page: number) => {
+    try {
+      setLoading(true);
+      const data = await userService.getCustomers(page);
+      // data.results.user is the array based on prompt
+      if (data && data.results && data.results.user) {
+        setCustomers(data.results.user);
+        setTotalCount(data.count || 0);
+      } else {
+        setCustomers([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch customers", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomers(currentPage);
+  }, [currentPage]);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -137,7 +61,7 @@ const CustomersListPage = () => {
             </div>
             <div>
               <h2 className="text-white text-3xl tracking-tight">
-                Customers List (788)
+                Customers List ({totalCount})
               </h2>
               <p className="text-[#98A2B3] text-sm mt-1">
                 Manage all registered customers
@@ -167,7 +91,9 @@ const CustomersListPage = () => {
               <button className="flex-1 md:flex-none px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiCopy size={16} /> Copy
               </button>
-              <button className="flex-1 md:flex-none px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
+              <button
+                onClick={() => window.print()}
+                className="flex-1 md:flex-none px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiPrinter size={16} /> Print
               </button>
             </div>
@@ -191,93 +117,92 @@ const CustomersListPage = () => {
               <thead>
                 <tr className="border-b border-[#C27AFF1A] text-[#99A1AF] text-[11px] font-medium uppercase tracking-widest whitespace-nowrap">
                   <th className="px-8 py-5">Account</th>
-                  <th className="px-8 py-5">Last Login</th>
+                  <th className="px-8 py-5">Joined</th>
                   <th className="px-8 py-5">Username</th>
                   <th className="px-8 py-5">Name</th>
                   <th className="px-8 py-5">Email</th>
-                  <th className="px-8 py-5">Withdrawal</th>
-                  <th className="px-8 py-5">Favorite Game</th>
+                  <th className="px-8 py-5">City/Country</th>
                   <th className="px-8 py-5">Status</th>
                   <th className="px-8 py-5 text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {customers.map((customer, idx) => (
+                {customers.map((customer) => (
                   <tr
-                    key={idx}
+                    key={customer.id}
                     className="border-b border-[#C27AFF08] hover:bg-[#AD46FF05] transition-colors group"
                   >
                     <td className="px-8 py-5 text-white text-sm font-medium">
-                      {customer.id}
+                      #{customer.id}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {customer.lastLogin}
+                      {customer.date_joined ? new Date(customer.date_joined).toLocaleDateString() : 'N/A'}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm w-40 leading-tight">
                       {customer.username}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm w-40 leading-tight">
-                      {customer.name}
+                      {customer.first_name} {customer.last_name}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm">
                       {customer.email}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm w-40 leading-tight">
-                      {customer.withdrawal}
-                    </td>
-                    <td className="px-8 py-5 text-[#98A2B3] text-sm text-center">
-                      {customer.favoriteGame}
+                      {customer.city || '-'}, {customer.country || '-'}
                     </td>
                     <td className="px-8 py-5">
-                      <span className="px-3 py-1 rounded-full border border-[#2B7FFF4D] bg-[#2B7FFF33] text-[#51A2FF] text-xs  tracking-wider">
-                        {customer.status}
+                      <span className={`px-3 py-1 rounded-full border text-xs tracking-wider ${customer.is_active
+                        ? "border-[#2B7FFF4D] bg-[#2B7FFF33] text-[#51A2FF]"
+                        : "border-[#FB2C364D] bg-[#FB2C3633] text-[#FF6467]"
+                        }`}>
+                        {customer.is_active ? "Active" : "Inactive"}
                       </span>
                     </td>
                     <td className="px-8 py-5 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="px-4 py-1.5 rounded-lg bg-[linear-gradient(90deg,#2D7FFF_0%,#0062FF_100%)] text-xs shadow-[0_0_15px_rgba(45,127,255,0.4)] text-white  hover:bg-[#1D4ED8] transition-all cursor-pointer">
-                          Manage
-                        </button>
-                        <button className="px-4 py-1.5 rounded-lg bg-[#00A63E] text-white text-xs shadow-[0_4px_6px_-4px_#00C95033] shadow-[0_10px_15px_-3px_#00C95033] hover:bg-[#059669EE] transition-all cursor-pointer">
-                          View
-                        </button>
+                        <Link href={`/admin/customer/${customer.id}`}>
+                          <button className="px-4 py-1.5 rounded-lg bg-[linear-gradient(90deg,#2D7FFF_0%,#0062FF_100%)] text-xs shadow-[0_0_15px_rgba(45,127,255,0.4)] text-white hover:bg-[#1D4ED8] transition-all cursor-pointer">
+                            Manage
+                          </button>
+                        </Link>
                       </div>
                     </td>
                   </tr>
                 ))}
+                {loading && (
+                  <tr>
+                    <td colSpan={8} className="px-8 py-5 text-center text-white">Loading...</td>
+                  </tr>
+                )}
+                {!loading && customers.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-8 py-5 text-center text-white">No customers found.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
 
             {/* Pagination / Info Row */}
             <div className="p-8 flex flex-col md:flex-row items-center justify-between border-t border-[#C27AFF1A] gap-4">
               <p className="text-[#98A2B3] text-sm">
-                Showing <span className="text-white font-medium">1</span> to{" "}
-                <span className="text-white font-medium">10</span> of{" "}
-                <span className="text-white font-medium">788</span> entries
+                Showing <span className="text-white font-medium">{customers.length > 0 ? (currentPage - 1) * 10 + 1 : 0}</span> to{" "}
+                <span className="text-white font-medium">{Math.min(currentPage * 10, totalCount)}</span> of{" "}
+                <span className="text-white font-medium">{totalCount}</span> entries
               </p>
               <div className="flex items-center gap-2">
-                <button className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer whitespace-nowrap">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer whitespace-nowrap">
                   Previous
                 </button>
                 <div className="flex items-center gap-1">
                   <button className="w-10 h-10 rounded-xl bg-[#AD46FF] text-white text-sm font-bold cursor-pointer">
-                    1
+                    {currentPage}
                   </button>
-                  <button className="w-10 h-10 rounded-xl bg-[#1E293B40] text-white text-sm font-bold hover:bg-[#1E293B60] cursor-pointer">
-                    2
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-[#1E293B40] text-white text-sm font-bold hover:bg-[#1E293B60] cursor-pointer">
-                    3
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-[#1E293B40] text-white text-sm font-bold hover:bg-[#1E293B60] cursor-pointer">
-                    4
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-[#1E293B40] text-white text-sm font-bold hover:bg-[#1E293B60] cursor-pointer">
-                    5
-                  </button>
-                  <span className="text-white/40 px-2">...</span>
                 </div>
-                <button className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                <button
+                  onClick={() => setCurrentPage(prev => prev + 1)}
+                  className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm flex items-center gap-2 cursor-pointer whitespace-nowrap">
                   Next
                 </button>
               </div>

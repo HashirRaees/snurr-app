@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "../../../components/admin/Navbar";
+import { ticketService } from "../../../lib/services/ticketService";
+import { format } from "date-fns";
 import { IoMdSearch, IoMdPrint, IoMdCopy } from "react-icons/io";
 import {
   FiClock,
@@ -15,6 +18,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { LuTicket } from "react-icons/lu";
 
 const TicketsPage = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
   const StatusCard = ({
@@ -66,88 +70,31 @@ const TicketsPage = () => {
     );
   };
 
-  const tickets = [
-    {
-      id: "77h7ev7894z",
-      email: "jake.apple@gmail.com",
-      title: "awdawd",
-      summary: "advwd",
-      status: "Closed",
-      date: "2022-05-01",
-    },
-    {
-      id: "U87aAEGQdA",
-      email: "jake.apple@gmail.com",
-      title: "awdawd",
-      summary: "advwd",
-      status: "Closed",
-      date: "2022-05-02",
-    },
-    {
-      id: "oCR3uBqVT",
-      email: "jake.apple@gmail.com",
-      title: "awdawd",
-      summary: "advwd",
-      status: "Submitted",
-      date: "2022-04-04",
-    },
-    {
-      id: "vCzV8kmgb",
-      email: "jake.apple@gmail.com",
-      title: "awdawd",
-      summary: "advwd",
-      status: "Submitted",
-      date: "2022-04-04",
-    },
-    {
-      id: "DFceum17bC",
-      email: "https://propersix.casino/signup/veriBOK56cg",
-      title: "1",
-      summary: "SSS",
-      status: "Submitted",
-      date: "2021-12-09",
-    },
-    {
-      id: "DN1r8BRxr",
-      email: "https://propersix.casino/signup/veriBOK56cg",
-      title: "1",
-      summary: "SSS",
-      status: "Submitted",
-      date: "2021-12-09",
-    },
-    {
-      id: "DoB8FrBbjS",
-      email: "jake.apple@gmail.com",
-      title: "awdawd",
-      summary: "advwd",
-      status: "Submitted",
-      date: "2022-04-04",
-    },
-    {
-      id: "dRaJZrmxZn",
-      email: "jake.apple@gmail.com",
-      title: "awdawd",
-      summary: "advwd",
-      status: "Submitted",
-      date: "2022-04-04",
-    },
-    {
-      id: "GSuVdd323wk",
-      email: "bakdikada@gmail.com",
-      title: "Check",
-      summary: "hello world",
-      status: "Submitted",
-      date: "2021-07-03",
-    },
-    {
-      id: "DuJRZYwZum",
-      email: "https://propersix.casino/signup/veriBOK56cg",
-      title: "1",
-      summary: "igmbostrty...hdaz-hi...",
-      status: "Submitted",
-      date: "2021-12-09",
-    },
-  ];
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const fetchTickets = async (page: number) => {
+    try {
+      setLoading(true);
+      const response = await ticketService.getTickets(page);
+      setTickets(response.results);
+      setTotalCount(response.count);
+      // Assuming 10 items per page as api default, adjust if needed
+      setTotalPages(Math.ceil(response.count / 10));
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets(currentPage);
+  }, [currentPage]);
+
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#22003B] font-sans pb-20">
@@ -219,9 +166,10 @@ const TicketsPage = () => {
                 <FiCopy size={18} />
                 Copy
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm font-medium hover:bg-[#1E293B] transition-all cursor-pointer">
-                <FiPrinter size={18} />
-                Print
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-2 bg-[#2D3748] hover:bg-[#4A5568] text-white px-4 py-2 rounded-lg transition-colors">
+                <FiPrinter size={18} /> Print
               </button>
             </div>
             <div className="relative flex-1 min-w-[300px] max-w-md ml-auto">
@@ -254,53 +202,37 @@ const TicketsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#C27AFF11]">
-                {tickets.map((row, idx) => (
+                {tickets.map((row) => (
                   <tr
-                    key={idx}
+                    key={row.id}
                     className="hover:bg-white/5 transition-colors group"
                   >
                     <td className="px-8 py-5 text-white font-medium text-sm">
                       <div className="flex items-center gap-2">
-                        {row.status === "Closed" && row.id.startsWith("U") && (
-                          <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                        )}
-                        {row.status === "Submitted" &&
-                          row.id.startsWith("o") && (
-                            <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                          )}
-                        {row.status === "Submitted" &&
-                          row.id.startsWith("v") && (
-                            <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                          )}
-                        {row.status === "Submitted" &&
-                          row.id.startsWith("D") && (
-                            <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                          )}
-                        {row.status === "Submitted" &&
-                          row.id.startsWith("d") && (
-                            <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></span>
-                          )}
-                        {row.id}
+                        {row.ticket_number || `#${row.id}`}
                       </div>
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
-                      {row.email}
+                      {row.user?.email || "Unknown User"}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {row.title}
+                      {row.ticket_title || "No Title"}
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm max-w-[200px] truncate">
-                      {row.summary}
+                      {/* Summary not available in list response usually, or fetch from content */}
+                      {row.contents?.[0]?.message || "No content"}
                     </td>
                     <td className="px-8 py-5">
-                      <StatusBadge status={row.status} />
+                      <StatusBadge status={row.ticket_status === 0 ? "Submitted" : "Closed"} />
                     </td>
                     <td className="px-8 py-5 text-[#98A2B3] text-sm">
-                      {row.date}
+                      {row.created_at ? format(new Date(row.created_at), 'yyyy-MM-dd') : 'N/A'}
                     </td>
                     <td className="px-8 py-5">
                       <div className="flex items-center justify-end">
-                        <button className="px-5 py-2 bg-[linear-gradient(90deg,#2D7FFF_0%,#0062FF_100%)] text-white text-xs font-bold rounded-lg shadow-[0_0_15px_rgba(45,127,255,0.4)] hover:scale-105 transition-all cursor-pointer">
+                        <button
+                          onClick={() => router.push(`/admin/tickets/${row.id}`)}
+                          className="px-5 py-2 bg-[linear-gradient(90deg,#2D7FFF_0%,#0062FF_100%)] text-white text-xs font-bold rounded-lg shadow-[0_0_15px_rgba(45,127,255,0.4)] hover:scale-105 transition-all cursor-pointer">
                           Manage
                         </button>
                       </div>

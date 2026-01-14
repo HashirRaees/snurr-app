@@ -4,65 +4,59 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../../../components/admin/Navbar";
 import { FiCopy, FiPrinter, FiPlus, FiTrash2 } from "react-icons/fi";
-import axiosInstance from "@/lib/axios";
-
-interface Bonus {
-  id: number;
-  bonus_name: string;
-  deposit_method: string | null;
-  min_loss: string | number | null;
-  bonus_code: string;
-  type: string;
-  bonus_amount: number | null;
-  free_spin: number;
-  game: string | null;
-  bet_size: number;
-  lines: number;
-  wagering_req: number;
-  from_field: string;
-  till: string;
-  specific_day: string | null;
-  recurring: string | null;
-  w_2: string | null;
-  ex_country: string | null;
-  aff_source: string | null;
-  status: boolean;
-  percent_amount: number | null;
-  max_amount: number | null;
-  chained: string | null;
-  ex_chain: string | null;
-  users: string | null;
-  vip_level: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import { bonusService, Bonus } from "../../../../lib/services/bonusService";
 
 const BonusesCodesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [bonuses, setBonuses] = useState<Bonus[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const fetchBonuses = async (page: number) => {
+    try {
+      setLoading(true);
+      const data = await bonusService.getBonuses(page);
+      // Prompt says results: { bonus_code: [...] }
+      if (data && data.results && data.results.bonus_code) {
+        setBonuses(data.results.bonus_code);
+        setTotalCount(data.count || 0);
+      } else {
+        setBonuses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching bonuses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBonuses = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "/api/bonuses/propersix-bonuses/"
-        );
-        // Ensure we handle array or wrapped responses
-        const data = Array.isArray(response.data)
-          ? response.data
-          : response.data.results || [];
-        setBonuses(data);
-      } catch (error) {
-        console.error("Error fetching bonuses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchBonuses(currentPage);
+  }, [currentPage]);
 
-    fetchBonuses();
-  }, []);
+  const handleStatusChange = async (id: number) => {
+    try {
+      await bonusService.changeStatus(id);
+      fetchBonuses(currentPage);
+    } catch (error) {
+      console.error("Failed to change status", error);
+      alert("Failed to change status");
+    }
+  };
 
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this bonus?")) return;
+    try {
+      await bonusService.deleteBonus(id);
+      fetchBonuses(currentPage);
+    } catch (error) {
+      console.error("Failed to delete bonus", error);
+      alert("Failed to delete bonus");
+    }
+  };
+
+  // Filter locally if needed or just rely on backend search if available (not in prompt, so local filter)
   const filteredBonuses = bonuses.filter(
     (bonus) =>
       bonus.bonus_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,9 +74,11 @@ const BonusesCodesPage = () => {
             Bonuses
           </span>
           <span className="text-white/20">/</span>
-          <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors ">
-            Add Bonus
-          </span>
+          <Link href="/admin/bonuses/add">
+            <span className="text-[#99A1AF] hover:text-[#C27AFF] cursor-pointer transition-colors ">
+              Add Bonus
+            </span>
+          </Link>
         </div>
 
         {/* Card Header Section */}
@@ -96,11 +92,11 @@ const BonusesCodesPage = () => {
           <div className="md:p-8 p-5 pt-10 flex flex-col md:flex-row items-center justify-between relative gap-6">
             <div className="flex-1 text-center">
               <h3 className="text-white text-2xl tracking-tight">
-                Bonus Codes List
+                Bonus Codes List ({totalCount})
               </h3>
             </div>
             <div className="absolute right-8 top-10 flex gap-4">
-              <Link href="/admin/bonuses">
+              <Link href="/admin/bonuses/add">
                 <button className="px-8 py-3 rounded-xl bg-[#2D7FFF] text-white text-sm flex items-center justify-center gap-2 hover:bg-[#2D7FFFEE] transition-all cursor-pointer shadow-[0_0_20px_rgba(45,127,255,0.5)]">
                   Add Bonus
                 </button>
@@ -114,7 +110,9 @@ const BonusesCodesPage = () => {
               <button className="px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiCopy size={16} /> Copy
               </button>
-              <button className="px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 bg-[#1E2939] border border-[#364153] rounded-xl text-white text-sm flex items-center justify-center gap-2 hover:bg-[#1E293B] transition-all cursor-pointer">
                 <FiPrinter size={16} /> Print
               </button>
             </div>
@@ -305,15 +303,15 @@ const BonusesCodesPage = () => {
                           {bonus.aff_source || "-"}
                         </td>
                         <td className="px-6 py-5">
-                          <span
-                            className={`px-3 py-2 rounded-lg text-xs   tracking-wider ${
-                              bonus.status
-                                ? "bg-[#155DFC] text--white shadow-[0_0_10px_rgba(45,127,255,0.3)]"
-                                : "bg-[#E7000B] text--white shadow-[0_0_10px_rgba(255,31,31,0.3)]"
-                            }`}
+                          <button
+                            onClick={() => handleStatusChange(bonus.id)}
+                            className={`px-3 py-2 rounded-lg text-xs tracking-wider cursor-pointer transition-opacity hover:opacity-80 ${bonus.status
+                              ? "bg-[#155DFC] text--white shadow-[0_0_10px_rgba(45,127,255,0.3)]"
+                              : "bg-[#E7000B] text--white shadow-[0_0_10px_rgba(255,31,31,0.3)]"
+                              }`}
                           >
                             {bonus.status ? "Active" : "Inactive"}
-                          </span>
+                          </button>
                         </td>
                         <td className="px-6 py-5 text-xs text-[#D1D5DC]">
                           {bonus.percent_amount || "-"}
@@ -346,7 +344,10 @@ const BonusesCodesPage = () => {
 
                         <td className="px-6 py-5 text-right whitespace-nowrap">
                           <div className="flex items-center justify-center gap-2">
-                            <button className="w-8 h-8 rounded-lg bg-[#E7000B] text-white flex items-center justify-center hover:bg-[#FF1F1FEE] transition-all cursor-pointer shadow-[0_0_10px_rgba(255,31,31,0.4)]">
+                            {/* Add Delete Button */}
+                            <button
+                              onClick={() => handleDelete(bonus.id)}
+                              className="w-8 h-8 rounded-lg bg-[#E7000B] text-white flex items-center justify-center hover:bg-[#FF1F1FEE] transition-all cursor-pointer shadow-[0_0_10px_rgba(255,31,31,0.4)]">
                               <FiTrash2 size={16} />
                             </button>
                           </div>
@@ -363,25 +364,26 @@ const BonusesCodesPage = () => {
               <p className="text-[#98A2B3] text-sm">
                 Showing{" "}
                 <span className="text-white ">
-                  {filteredBonuses.length > 0 ? 1 : 0}
+                  {filteredBonuses.length > 0 ? (currentPage - 1) * 20 + 1 : 0}
                 </span>{" "}
-                to <span className="text-white ">{filteredBonuses.length}</span>{" "}
-                of <span className="text-white ">{filteredBonuses.length}</span>{" "}
+                to <span className="text-white ">{(currentPage - 1) * 20 + filteredBonuses.length}</span>{" "}
+                of <span className="text-white ">{totalCount}</span>{" "}
                 entries
               </p>
               <div className="flex items-center gap-2">
-                <button className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer disabled:opacity-50">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer disabled:opacity-50">
                   Previous
                 </button>
                 <div className="flex items-center gap-1">
                   <button className="w-8 h-8 rounded-lg bg-[#2D7FFF] text-white text-xs  cursor-pointer">
-                    1
-                  </button>
-                  <button className="w-8 h-8 rounded-lg bg-[#36415340] text-white text-xs  hover:bg-[#36415360] cursor-pointer transition-all">
-                    2
+                    {currentPage}
                   </button>
                 </div>
-                <button className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer whitespace-nowrap">
+                <button
+                  onClick={() => setCurrentPage(p => p + 1)}
+                  className="px-4 py-2 border border-[#C27AFF1A] rounded-xl text-[#98A2B3] hover:text-white hover:border-[#C27AFF4D] transition-all bg-[#1E293B40] text-sm cursor-pointer whitespace-nowrap">
                   Next
                 </button>
               </div>
